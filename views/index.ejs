@@ -1,51 +1,28 @@
 <!DOCTYPE html>
-<html ng-app= "mapApp" >
-<head>
-  <title>Hello World, AngularJS</title>
-  <script type="text/javascript"
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL9kCGzu4TIVuotYsHHHhFrCpIlT2y1I4"></script>
-  <script type="text/javascript"
-          src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-  <script type= "text/javascript" src= "js/map.js"> </script>
-  <script>
-    var mapApp= angular.module("mapApp", []);
-    mapApp.directive("myMaps", function() {
-      return {
-        restrict:'E',
-        template: '<div></div>',
-        replace: true,
-        link: function(scope, element, attrs){
-          var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
-          var mapOptions = {
-            center: myLatLng,
-            zoom: 16,
-            mapTypeId: google.maps.MapTypeId.SATELLITE
-          };
-          var map = new google.maps.Map(document.getElementById(attrs.id), mapOptions);
-          var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-            title: 'SJSU'
-          });
-          marker.setMap(map);
-
-        }
-      };
-    });
-  </script>
-  <style>
-    #map-canvas {
-      height: 400px;
-      width: 700px;
-      border: 2px solid black;
-    }
-  </style>
-</head>
+<html ng-app="mapApp">
+<%include header%>>
 <body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-7">
 
-Write some text in textbox:
-<input type="text" ng-model="sometext" />
-<h1>Hello {{ sometext }}</h1>
-<my-maps id= "map-canvas"></my-maps>
+            <div id="map-canvas">
+                google map
+                <my-maps id="map-canvas"></my-maps>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="example">
+                chart</br>
+                selected produces chart using chart.js
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md priceChart">
+            price trend chart
+        </div>
+    </div>
+</div>
 </body>
 </html>
