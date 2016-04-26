@@ -1,51 +1,102 @@
 <!DOCTYPE html>
-<html ng-app= "mapApp" >
+<html ng-app="mapApp">
 <head>
-  <title>Hello World, AngularJS</title>
-  <script type="text/javascript"
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL9kCGzu4TIVuotYsHHHhFrCpIlT2y1I4"></script>
-  <script type="text/javascript"
-          src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-  <script type= "text/javascript" src= "js/map.js"> </script>
-  <script>
-    var mapApp= angular.module("mapApp", []);
-    mapApp.directive("myMaps", function() {
-      return {
-        restrict:'E',
-        template: '<div></div>',
-        replace: true,
-        link: function(scope, element, attrs){
-          var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
-          var mapOptions = {
-            center: myLatLng,
-            zoom: 16,
-            mapTypeId: google.maps.MapTypeId.SATELLITE
-          };
-          var map = new google.maps.Map(document.getElementById(attrs.id), mapOptions);
-          var marker = new google.maps.Marker({
-            position: myLatLng,
-            map: map,
-            title: 'SJSU'
-          });
-          marker.setMap(map);
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL9kCGzu4TIVuotYsHHHhFrCpIlT2y1I4"></script>
+    <script type="text/javascript"
+            src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script type="text/javascript" src="js/map.js"></script>
+    <script>
+        var mapApp = angular.module("mapApp", []);
+        mapApp.directive("myMaps", function () {
+            return {
+                restrict: 'E',
+                template: '<div></div>',
+                replace: true,
+                link: function (scope, element, attrs) {
+                    var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
+                    var mapOptions = {
+                        center: myLatLng,
+                        zoom: 16,
+                        mapTypeId: google.maps.MapTypeId.SATELLITE
+                    };
+                    var map = new google.maps.Map(document.getElementById(attrs.id), mapOptions);
+                    var marker = new google.maps.Marker({
+                        position: myLatLng,
+                        map: map,
+                        title: 'SJSU'
+                    });
+                    marker.setMap(map);
 
+                }
+            };
+        });
+    </script>
+    <style>
+        #map-canvas {
+            height: 400px;
+            width: 100%;
+            border: 2px solid black;
         }
-      };
-    });
-  </script>
-  <style>
-    #map-canvas {
-      height: 400px;
-      width: 700px;
-      border: 2px solid black;
-    }
-  </style>
+        .example {
+            height: 400px;
+            width: 100%;
+            border: 2px solid black;
+            background-color:gray;
+        }
+        .priceChart {
+            margin-top:10px;
+            height: 200px;
+            width: 100%;
+            border: 2px solid black;
+            background-color:pink;
+        }
+        body{
+            margin:10px 10px 10px 10px;
+        }
+    </style>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md text-center">
+                <h1>Smart Farm</h1>
+                <p><em>Team 3 project</em></p>
+            </div>
+        </div>
+    </div>
 </head>
 <body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-7">
 
-Write some text in textbox:
-<input type="text" ng-model="sometext" />
-<h1>Hello {{ sometext }}</h1>
-<my-maps id= "map-canvas"></my-maps>
+            <div id="map-canvas">
+                google map
+                <my-maps id="map-canvas"></my-maps>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="example">
+                chart</br>
+                selected produces chart using chart.js
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md priceChart">
+            price trend chart
+        </div>
+    </div>
+</div>
 </body>
 </html>
