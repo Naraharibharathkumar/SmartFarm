@@ -31,7 +31,7 @@
                 link: function (scope, element, attrs) {
                     // SJSU coordinates
                     var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
-                    var minZoomLevel= 10;
+                    var minZoomLevel= 5;
                     var mapOptions = {
                         center: myLatLng,
                         zoom: minZoomLevel,
@@ -63,8 +63,7 @@
                     var circle = new google.maps.Circle({
                         map: map,
                         radius: 8046.72,    // 10 miles in metres
-                        fillColor: '#AA0000',
-                        strokeColor: '#FF0000',
+                        fillColor: '#00FF00',
                         strokeWeight: 1
                     });
                     circle.bindTo('center', marker, 'position');
