@@ -12,9 +12,10 @@
             </div>
         </div>
         <div class="col-md-5">
-            <div class="example">
-                chart</br>
-                selected produces chart using chart.js
+            <div class="example" ng-controller="BarCtrl" id="barChart">
+                <canvas id="bar" class="chart chart-bar"
+                        chart-data="data" chart-labels="labels"> chart-series="series">
+                </canvas>
             </div>
         </div>
     </div>
