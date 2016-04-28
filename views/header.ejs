@@ -26,11 +26,17 @@
                 link: function (scope, element, attrs) {
                     // SJSU coordinates
                     var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
-                    var minZoomLevel= 5;
+                    var minZoomLevel= 10;
                     var mapOptions = {
                         center: myLatLng,
                         zoom: minZoomLevel,
-                        mapTypeId: google.maps.MapTypeId.HYBRID
+                        zoomControl: true,
+                        zoomControlOptions: {
+                            style: google.maps.ZoomControlStyle.SMALL
+                        },
+                        mapTypeId: google.maps.MapTypeId.TERRAIN,
+                        draggableCursor:'crosshair',
+                        draggingCursor: 'move'
                     };
                     var map = new google.maps.Map(document.getElementById(attrs.id), mapOptions);
 
@@ -42,12 +48,27 @@
                     );
 
                     // Put a marker on SJSU
-                    var marker = new google.maps.Marker({
-                        position: myLatLng,
+                     var marker = new google.maps.Marker({
                         map: map,
-                        title: 'SJSU'
+                        draggable: true,
+                        animation: google.maps.Animation.DROP,
+                        position: myLatLng
                     });
-                    marker.setMap(map);
+
+                    var circle = new google.maps.Circle({
+                        map: map,
+                        radius: 8046.72,    // 10 miles in metres
+                        fillColor: '#AA0000',
+                        strokeColor: '#FF0000',
+                        strokeWeight: 1
+                    });
+                    circle.bindTo('center', marker, 'position');
+
+                    // move the marker on click events
+                    google.maps.event.addListener(map, 'click', function(event) {
+                        marker.setPosition(event.latLng);
+                        circle.setCenter(event.latLng);
+                    });
 
                     // Listen for the dragend event
                     google.maps.event.addListener(map, 'dragend', function() {
