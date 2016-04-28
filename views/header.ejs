@@ -14,8 +14,13 @@
             crossorigin="anonymous"></script>
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL9kCGzu4TIVuotYsHHHhFrCpIlT2y1I4"></script>
-    <script type="text/javascript"
-            src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+    <!-- for angular chart js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/angular.chartjs/0.8.8/angular-chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/angular.chartjs/0.8.8/angular-chart.min.css">
+
     <script>
         var mapApp = angular.module("mapApp", []);
         mapApp.directive("myMaps", function () {
@@ -77,6 +82,25 @@
                 }
             };
         });
+
+        var lineChart = angular.module("lineChart", ["chart.js"])
+                .controller("LineCtrl", function ($scope) {
+                    $scope.message = "hello";
+                    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+                    $scope.series = ['Series A', 'Series B'];
+                    $scope.data = [
+                        [65, 59, 80, 81, 56, 55, 40],
+                        [28, 48, 40, 19, 86, 27, 90]
+                    ];
+                    $scope.onClick = function (points, evt) {
+                        console.log(points, evt);
+                    };
+                });
+
+        angular.element(document).ready(function() {
+            angular.bootstrap(document.getElementById("lineChart"), ['lineChart']);
+        });
+
     </script>
 
     <style>
@@ -93,10 +117,10 @@
         }
         .priceChart {
             margin-top:10px;
-            height: 200px;
+            height: 300px;
             width: 100%;
             border: 2px solid black;
-            background-color:pink;
+
         }
         body{
             margin:10px 10px 10px 10px;
