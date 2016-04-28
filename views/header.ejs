@@ -129,12 +129,15 @@
                 [28, 48, 40, 19, 86, 27, 90]
             ];
         });
-        
-        angular.element(document).ready(function() {
-            angular.bootstrap(document.getElementById("lineChart"), ['lineChart']);
+
+        //combine into one app
+        angular.module("app", ["lineChart", "barChart","mapApp"]);
+
+//        angular.element(document).ready(function() {
+//            angular.bootstrap(document.getElementById("lineChart"), ['lineChart']);
 //            angular.bootstrap(document.getElementById("barChart"),["barChart"]);
-            angular.bootstrap(document.getElementsByClassName("example"),["barChart"]);
-        });
+//            angular.bootstrap(document.getElementsByClassName("example"),["barChart"]);
+//        });
 
     </script>
 
