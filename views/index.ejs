@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="col-md-5">
-            <div class="example" ng-controller="BarCtrl" id="barChart">
+            <div class="produceChart" ng-controller="BarCtrl" id="barChart">
                 <canvas id="bar" class="chart chart-bar"
                         chart-data="data" chart-labels="labels"> chart-series="series">
                 </canvas>
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md">
+        <div class="col-md-12">
             <div ng-controller="LineCtrl" id="lineChart">
                 <canvas id="line" class="chart chart-line priceChart" chart-data="data"
                         chart-labels="labels" chart-legend="true" chart-series="series"
