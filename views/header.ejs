@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/angular.chartjs/0.8.8/angular-chart.min.css">
 
     <script>
-        var mapApp = angular.module("mapApp", []);
+        var mapApp = angular.module("mapApp", ["chart.js"]);
         mapApp.directive("myMaps", function () {
             return {
                 restrict: 'E',
@@ -31,7 +31,7 @@
                 link: function (scope, element, attrs) {
                     // SJSU coordinates
                     var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
-                    var minZoomLevel= 5;
+                    var minZoomLevel = 5;
                     var mapOptions = {
                         center: myLatLng,
                         zoom: minZoomLevel,
@@ -40,7 +40,7 @@
                             style: google.maps.ZoomControlStyle.SMALL
                         },
                         mapTypeId: google.maps.MapTypeId.TERRAIN,
-                        draggableCursor:'crosshair',
+                        draggableCursor: 'crosshair',
                         draggingCursor: 'move'
                     };
                     var map = new google.maps.Map(document.getElementById(attrs.id), mapOptions);
@@ -53,7 +53,7 @@
                     );
 
                     // Put a marker on SJSU
-                     var marker = new google.maps.Marker({
+                    var marker = new google.maps.Marker({
                         map: map,
                         draggable: true,
                         animation: google.maps.Animation.DROP,
@@ -69,13 +69,13 @@
                     circle.bindTo('center', marker, 'position');
 
                     // move the marker on click events
-                    google.maps.event.addListener(map, 'click', function(event) {
+                    google.maps.event.addListener(map, 'click', function (event) {
                         marker.setPosition(event.latLng);
                         circle.setCenter(event.latLng);
                     });
 
                     // Listen for the dragend event
-                    google.maps.event.addListener(map, 'dragend', function() {
+                    google.maps.event.addListener(map, 'dragend', function () {
                         if (strictBounds.contains(map.getCenter())) return;
 
                         // We're out of bounds - Move the map back within the bounds
@@ -96,47 +96,37 @@
                     });
 
                     // Limit the zoom level
-                    google.maps.event.addListener(map, 'zoom_changed', function() {
+                    google.maps.event.addListener(map, 'zoom_changed', function () {
                         if (map.getZoom() < minZoomLevel) map.setZoom(minZoomLevel);
                     });
                 }
             };
         });
 
-        var produceData = [90,80,60,20,10] //replace with real data later
-        var produceName = ['Potato','Tomato','Corn','Ginger','Grape'] //replace with real data later
+        var produceData = [90, 80, 60, 20, 10] //replace with real data later
+        var produceName = ['Potato', 'Tomato', 'Corn', 'Ginger', 'Grape'] //replace with real data later
 
         //line chart for demo
-        var lineChart = angular.module("lineChart", ["chart.js"])
-                .controller("LineCtrl", function ($scope) {
-                    $scope.message = "hello";
-                    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-                    $scope.series = ['Series A', 'Series B'];
-                    $scope.data = [
-                        [65, 59, 80, 81, 56, 55, 40],
-                        [28, 48, 40, 19, 86, 27, 90]
-                    ];
-                    $scope.onClick = function (points, evt) {
-                        console.log(points, evt);
-                    };
-                });
-
-        //bar chart for demo
-        var barChart= angular.module("barChart", ["chart.js"])
-                .controller("BarCtrl", function ($scope) {
-            $scope.labels = produceName;
-           // $scope.series = ['Series A'];
-            $scope.data = [ produceData ];
+        mapApp.controller("LineCtrl", function ($scope) {
+            $scope.message = "hello";
+            $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+            $scope.series = ['Series A', 'Series B'];
+            $scope.data = [
+                [65, 59, 80, 81, 56, 55, 40],
+                [28, 48, 40, 19, 86, 27, 90]
+            ];
+            $scope.onClick = function (points, evt) {
+                console.log(points, evt);
+            };
         });
 
-        //combine into one app
-        angular.module("app", ["lineChart", "barChart","mapApp"]);
+        //bar chart for demo
+        mapApp.controller("BarCtrl", function ($scope) {
+            $scope.labels = produceName;
+            // $scope.series = ['Series A'];
+            $scope.data = [produceData];
+        });
 
-//        angular.element(document).ready(function() {
-//            angular.bootstrap(document.getElementById("lineChart"), ['lineChart']);
-//            angular.bootstrap(document.getElementById("barChart"),["barChart"]);
-//            angular.bootstrap(document.getElementsByClassName("example"),["barChart"]);
-//        });
 
     </script>
 
@@ -146,21 +136,24 @@
             width: 100%;
             /*border: 2px solid black;*/
         }
+
         .produceChart {
             height: 400px;
             width: 100%;
             padding-top: 20%;
             /*border: 2px solid black;*/
         }
+
         .priceChart {
-            margin-top:10px;
+            margin-top: 10px;
             height: 300px;
             width: 100%;
             /*border: 2px solid black;*/
 
         }
-        body{
-            margin:10px 10px 10px 10px;
+
+        body {
+            margin: 10px 10px 10px 10px;
         }
     </style>
 
@@ -179,17 +172,17 @@
                 </div>
             </div>
 
-            <div class="col-md-3" >
+            <div class="col-md-3">
                 <div id="usda-logo" align="right">
                     <img src="images/usda.jpg" height="82" width="82">
                 </div>
             </div>
         </div>
         <!--<div class="row">-->
-            <!--<div class="col-md text-center">-->
-                <!--<h1>Smart Farm</h1>-->
-                <!--<p><em>Team 3 project</em></p>-->
-            <!--</div>-->
+        <!--<div class="col-md text-center">-->
+        <!--<h1>Smart Farm</h1>-->
+        <!--<p><em>Team 3 project</em></p>-->
+        <!--</div>-->
         <!--</div>-->
     </div>
 </head>
