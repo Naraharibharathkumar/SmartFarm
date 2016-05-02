@@ -5,13 +5,13 @@
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-xs-7 col-md-7">
             <div id="map-canvas">
                 google map
                 <my-maps id="map-canvas"></my-maps>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-xs-5 col-md-5">
             <div class="produceChart" ng-controller="BarCtrl" id="barChart">
                 <canvas id="bar" class="chart chart-bar"
                         chart-data="data" chart-labels="labels"> chart-series="series">
@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div ng-controller="LineCtrl" id="lineChart">
                 <canvas id="line" class="chart chart-line priceChart" chart-data="data"
                         chart-labels="labels" chart-legend="true" chart-series="series"
