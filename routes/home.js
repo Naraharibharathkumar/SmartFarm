@@ -1,6 +1,7 @@
 /**
  * Created by Tiya on 29-04-2016.
  */
+
 var mongo = require("./mongo");
 var mongoURL = "mongodb://localhost:27017/smartfarm";
 
@@ -34,3 +35,4 @@ exports.checkDBConnection = function(req,res){
     });
 
 };
+    

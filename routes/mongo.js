@@ -1,6 +1,7 @@
 /**
  * Created by Tiya on 29-04-2016.
  */
+
 var MongoClient = require('mongodb').MongoClient;
 var db;
 var connected = false;
@@ -8,6 +9,7 @@ var connected = false;
 /**
  * Connects to the MongoDB Database with the provided URL
  */
+
 exports.connect = function(url, callback){
     MongoClient.connect(url, function(err, _db){
         if (err) { throw new Error('Could not connect: '+err); }
@@ -18,9 +20,11 @@ exports.connect = function(url, callback){
     });
 };
 
+
 /**
  * Returns the collection on the selected database
  */
+
 exports.collection = function(name){
     if (!connected) {
         throw new Error('Must connect to Mongo before calling "collection"');
