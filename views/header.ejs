@@ -32,7 +32,7 @@
                 replace: true,
                 link: function (scope, element, attrs) {
                     // SJSU coordinates
-                    var countyCode = 085;  // SANTA CLARA
+                    // County: SANTA CLARA
                     var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
                     var minZoomLevel = 11;
                     var mapOptions = {
@@ -64,6 +64,7 @@
                         animation: google.maps.Animation.DROP,
                         position: myLatLng
                     });
+                    // call getCountyName(myLatLng.latitude, myLatLng.longitude)
 
                     // default address
                     infowindow.setContent(" SJSU, San Jose, CA 95192");
@@ -81,6 +82,8 @@
                     google.maps.event.addListener(map, 'click', function (event) {
                         marker.setPosition(event.latLng);
                         circle.setCenter(event.latLng);
+
+                        // call getCountyName(event.latLng.latitude, event.latLng.longitude)
 
                         // reverse geocode
                         geocoder.geocode({'location': event.latLng}, function (results, status) {
@@ -100,6 +103,7 @@
                     // if the marker is dragged, reset the address
                     google.maps.event.addListener(marker, 'dragend', function () {
 
+                        // call getCountyName(marker.getPosition().latitude, marker.getPosition().longitude)
                         // reverse geocode
                         geocoder.geocode({'location': marker.getPosition()}, function (results, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
