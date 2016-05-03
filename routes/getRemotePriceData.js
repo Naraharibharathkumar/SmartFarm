@@ -25,6 +25,7 @@ exports.getCropPrice = function(req, res) {
         });
     });
 };
+
 function parseDataForPrice(jsonObj,res, callback){
     var mainJson = {"dataArray" : []};
     var tempJson = {};
@@ -38,13 +39,16 @@ function parseDataForPrice(jsonObj,res, callback){
                 "statisticcat_desc" : tempJson.statisticcat_desc.toString(),
                 "unit_desc" : tempJson.unit_desc.toString(),
                 "state_name" : tempJson.state_name.toString(),
+                "country_name" : tempJson.country_name.toString(),
                 "year" : tempJson.year.toString(),
+                "load_time" : tempJson.load_time.toString(),
                 "value": tempJson.value.toString()
             });
         }
     };
     callback(res,mainJson);
 };
+
 function displayData(res,mainData){
     res.setHeader('Content-Type', 'application/json');
     res.send(mainData);
