@@ -8,7 +8,6 @@ exports.insertPriceData = function(jsonObj, res){
     console.log(jsonObj)
     for(var i=0;i<jsonObj.length;i++){
         mongoDbObj.priceSchema.insert(jsonObj[i],{w:1},function(err, result){
-            console.log(JSON.stringify(jsonObj[i]));
             if(err){
                 //res.write('Unable to write Data');
                 //res.end();
@@ -26,7 +25,6 @@ exports.insertAreaData = function(jsonObj, res){
     console.log(jsonObj)
     for(var i=0;i<jsonObj.length;i++){
         mongoDbObj.areaSchema.insert(jsonObj[i],{w:1},function(err, result){
-            console.log(JSON.stringify(jsonObj[i]));
             if(err){
                 //res.write('Unable to write Data');
                 //res.end();
