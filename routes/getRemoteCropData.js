@@ -1,13 +1,13 @@
 /**
- * Created by Bharath Kumar on 5/2/2016.
+ * Created by Bharath Kumar on 5/3/2016.
  */
 var ns = require('http')
 var path = process.argv.slice(2)
 
-exports.getCropPrice = function(req, res) {
+exports.getCropArea = function(req, res) {
     ns.get({
         host: 'nass-api.azurewebsites.net',
-        path: '/api/api_get?source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&statisticcat_desc=PRICE%20RECEIVED&year__or=2015&year__or=2014&year__or=2013'
+        path: 'api/api_get?agg_level_desc=COUNTY&source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&year__or=2015&year__or=2014&year__or=2013'
     }, function doneSending(response) {
         console.log("Received Data and waiting for the end");
         var body = '';
@@ -18,14 +18,14 @@ exports.getCropPrice = function(req, res) {
         response.on('end', function () {
             console.log('No more data in response');
             var dataParse = JSON.parse(body);
-            parseDataForPrice(dataParse, res, displayData);
+            parseDataForArea(dataParse, res, displayData);
         });
         response.on('error', function (errorDisplay) {
             console.log('Problem with request: ${errorDisplay.message}')
         });
     });
 };
-function parseDataForPrice(jsonObj,res, callback){
+function parseDataForArea(jsonObj,res, callback){
     var mainJson = {"dataArray" : []};
     var tempJson = {};
     var insertJson = {};
