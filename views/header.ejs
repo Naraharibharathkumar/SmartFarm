@@ -104,30 +104,31 @@
         });
 
         var produceData = [90, 80, 60, 20, 10] //replace with real data later
-        var produceName = ['Potato', 'Tomato', 'Corn', 'Ginger', 'Grape'] //replace with real data later
+        var produceName = [{name:'Potato'}, {name:'Tomato'}, {name:'Corn'}, {name:'Ginger'}, {name:'Grape'}] //replace with real data later
 
         //line chart for demo
-        mapApp.controller("LineCtrl", function ($scope) {
-            $scope.message = "hello";
-            $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-            $scope.series = ['Series A', 'Series B'];
-            $scope.data = [
+        mapApp.controller("LineCtrl", function ($rootScope) {
+            $rootScope.labelsLine = ["January", "February", "March", "April", "May", "June", "July"];
+            $rootScope.seriesLine = ['Series A', 'Series B'];
+            $rootScope.dataLine = [
                 [65, 59, 80, 81, 56, 55, 40],
                 [28, 48, 40, 19, 86, 27, 90]
             ];
-            $scope.onClick = function (points, evt) {
-                console.log(points, evt);
-            };
+//            $rootScope.onClick = function (points, evt) {
+//                console.log(points, evt);
+//            };
         });
+
+        //var $scope=[];
 
         //bar chart for demo
-        mapApp.controller("BarCtrl", function ($scope) {
-            $scope.labels = produceName;
+        mapApp.controller("BarCtrl",['$rootScope', function ($rootScope) {
+            $rootScope.producesBar = produceName;
+            $rootScope.labelsBar =['','','','','']; // To draw 5 bars
+            //$scope.labels = produceName;
             // $scope.series = ['Series A'];
-            $scope.data = [produceData];
-        });
-
-
+            $rootScope.dataBar = [produceData];
+        }]);
     </script>
 
     <style>
@@ -149,7 +150,6 @@
             height: 300px;
             width: 100%;
             /*border: 2px solid black;*/
-
         }
 
         body {

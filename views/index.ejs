@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="mapApp">
-<%include header%>
+<% include header %>
 <body>
 </div>
 <div class="container-fluid">
@@ -11,20 +11,25 @@
                 <my-maps id="map-canvas"></my-maps>
             </div>
         </div>
-        <div class="col-xs-5 col-md-5">
-            <div class="produceChart" ng-controller="BarCtrl" id="barChart">
+        <div class="col-xs-5 col-md-5" ng-controller="BarCtrl">
+            <div class="produceChart" id="barChart">
                 <canvas id="bar" class="chart chart-bar"
-                        chart-data="data" chart-labels="labels"> chart-series="series">
+                        chart-data="dataBar" chart-labels="labelsBar" chart-series="series">
                 </canvas>
             </div>
+            <!--<div class="productChart">-->
+                <!--<span ng-repeat="produceName in producesBar"><input id="{{produceName.name}}" type="checkbox"-->
+                                                                    <!--ng-model="produceName[name]">{{ produceName.name }}</span>-->
+            <!--</div>-->
         </div>
     </div>
+    <div ng-show=""></div>
     <div class="row">
         <div class="col-xs-12 col-md-12">
             <div ng-controller="LineCtrl" id="lineChart">
-                <canvas id="line" class="chart chart-line priceChart" chart-data="data"
-                        chart-labels="labels" chart-legend="true" chart-series="series"
-                        chart-click="onClick" >
+                <canvas id="line" class="chart chart-line priceChart" chart-data="dataLine"
+                        chart-labels="labelsLine" chart-legend="true" chart-series="seriesLine"
+                        chart-click="onClick">
                 </canvas>
             </div>
         </div>
