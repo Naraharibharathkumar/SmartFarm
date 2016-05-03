@@ -38,6 +38,7 @@ function parseDataForPrice(jsonObj,res, callback){
                 "class_desc" : tempJson.class_desc.toString(),
                 "statisticcat_desc" : tempJson.statisticcat_desc.toString(),
                 "unit_desc" : tempJson.unit_desc.toString(),
+                "agg_level_desc" : tempJson.agg_level_desc.toString(),
                 "state_name" : tempJson.state_name.toString(),
                 "country_name" : tempJson.country_name.toString(),
                 "year" : tempJson.year.toString(),
