@@ -10,6 +10,8 @@ var users = require('./routes/users');
 var apiCalls = require('./routes/apiCalls');
 var remoteCall = require('./routes/getRemotePriceData');
 var remoteCall1 = require('./routes/getRemoteCropData');
+var remoteCall2= require('./routes/getGeocodeInfo');
+
 
 var app = express();
 
@@ -49,6 +51,7 @@ app.use('/users', users);
 app.get('/getData', apiCalls.getData);
 app.get('/getData1', remoteCall.getCropPrice);
 app.get('/getData2', remoteCall1.getCropArea);
+app.get('/getGeo/', remoteCall2.getCountyName);
 //app.get('/dbconnection',home.checkDBConnection);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
