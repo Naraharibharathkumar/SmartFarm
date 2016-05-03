@@ -9,7 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var apiCalls = require('./routes/apiCalls');
 var remoteCall = require('./routes/getRemotePriceData');
-var remoteCall1 = require('./routes/getRemoteCropData');
+var remoteCall1 = require('./routes/getRemoteAreaData');
 var remoteCall2= require('./routes/getGeocodeInfo');
 
 

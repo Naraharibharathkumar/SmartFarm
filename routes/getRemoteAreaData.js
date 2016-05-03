@@ -2,6 +2,7 @@
  * Created by Bharath Kumar on 5/3/2016.
  */
 var ns = require('http')
+var area = require('../mongodb-apiCalls/crudCalls');
 
 exports.getCropArea = function(req, res) {
     ns.get({
@@ -26,13 +27,12 @@ exports.getCropArea = function(req, res) {
 };
 
 function parseDataForArea(jsonObj,res, callback){
-    var mainJson = {"dataArray" : []};
+    var mainJson = [];
     var tempJson = {};
-    var insertJson = {};
     for(var i=0;i<jsonObj.data.length;i++){
         tempJson = jsonObj.data[i];
-        if((tempJson.unit_desc.indexOf("ACRES") > -1)&&(tempJson.statisticcat_desc.indexOf("AREA") > -1)){
-            mainJson.dataArray.push({
+        if((tempJson.unit_desc.indexOf("ACRES") > -1)&&(tempJson.statisticcat_desc.indexOf("AREA HARVESTED") > -1)){
+            mainJson.push({
                 "commodity_desc" : tempJson.commodity_desc.toString(),
                 "class_desc" : tempJson.class_desc.toString(),
                 "statisticcat_desc" : tempJson.statisticcat_desc.toString(),
@@ -53,6 +53,5 @@ function parseDataForArea(jsonObj,res, callback){
 };
 
 function displayData(res,mainData){
-    res.setHeader('Content-Type', 'application/json');
-    res.send(mainData);
+    area.insertAreaData(mainData,res);
 };
