@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var apiCalls = require('./routes/apiCalls');
+var finalCalls = require('./routes/getRemotePriceData');
 
 var app = express();
 
@@ -45,6 +46,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 app.get('/getData', apiCalls.getData);
+app.get('/getData1', finalCalls.getData);
 //app.get('/dbconnection',home.checkDBConnection);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
