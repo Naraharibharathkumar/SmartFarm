@@ -13,17 +13,14 @@
         </div>
         <div class="col-xs-5 col-md-5" ng-controller="BarCtrl">
             <div class="produceChart" id="barChart">
+                <div class="produceChkbox" ng-repeat="produce in producesBar">
+                    <input id="{{produce.name}}" type="checkbox" ng-model="produce.show">
+                    <label for="{{produce.name}}">  {{ produce.name }} </label>
+                </div>
                 <canvas id="bar" class="chart chart-bar"
                         chart-data="dataBar" chart-labels="labelsBar" chart-series="series">
                 </canvas>
             </div>
-            <div class="productChart">
-                <span ng-repeat="produce in producesBar"><input id="{{produce.name}}" type="checkbox"
-                                                                    ng-model="produce.show">{{ produce.name }}</span>
-
-            </div>
-
-
         </div>
     </div>
     <div class="row">

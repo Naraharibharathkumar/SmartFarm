@@ -20,6 +20,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
     <script src="https://cdn.jsdelivr.net/angular.chartjs/0.8.8/angular-chart.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/angular.chartjs/0.8.8/angular-chart.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
 
     <script>
         var mapApp = angular.module("mapApp", ["chart.js"]);
@@ -30,7 +32,7 @@
                 replace: true,
                 link: function (scope, element, attrs) {
                     // SJSU coordinates
-                    var countyCode= 085;  // SANTA CLARA
+                    var countyCode = 085;  // SANTA CLARA
                     var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
                     var minZoomLevel = 11;
                     var mapOptions = {
@@ -69,7 +71,7 @@
 
                     var circle = new google.maps.Circle({
                         map: map,
-                        radius: 3*(1609.34),    // in metres
+                        radius: 3 * (1609.34),    // in metres
                         fillColor: '#00FF00',
                         strokeWeight: 1
                     });
@@ -81,7 +83,7 @@
                         circle.setCenter(event.latLng);
 
                         // reverse geocode
-                        geocoder.geocode({'location': event.latLng}, function(results, status) {
+                        geocoder.geocode({'location': event.latLng}, function (results, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
                                 if (results[1]) {
                                     infowindow.setContent(results[1].formatted_address);
@@ -96,10 +98,10 @@
                     });
 
                     // if the marker is dragged, reset the address
-                    google.maps.event.addListener(marker, 'dragend', function() {
+                    google.maps.event.addListener(marker, 'dragend', function () {
 
                         // reverse geocode
-                        geocoder.geocode({'location': marker.getPosition()}, function(results, status) {
+                        geocoder.geocode({'location': marker.getPosition()}, function (results, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
                                 if (results[1]) {
                                     infowindow.setContent(results[1].formatted_address);
@@ -110,7 +112,7 @@
                                 window.alert('Geocoder failed due to: ' + status);
                             }
                         });
-                    } );
+                    });
 
                     // Listen for the dragend event
                     google.maps.event.addListener(map, 'dragend', function () {
@@ -143,17 +145,17 @@
 
         var produceData = [90, 80, 60, 20, 10] //replace with real data later
         //var produceName = [{name:'Potato'}, {name:'Tomato'}, {name:'Corn'}, {name:'Ginger'}, {name:'Grape'}] //replace with real data later
-        var produce = [{name:'Potato',show:false, price:[[65, 59, 80, 81, 56, 55, 40]]},
-            {name:'Tomato',show:false,price:[[65, 59, 80, 81, 56, 0, 40]]},
-            {name:'Corn',show:false,price:[[65, 59, 80, 81, 56, 7, 40]]},
-            {name:'Ginger',show:false,price:[[65, 2, 80, 81, 56, 55, 40]]},
-            {name:'Grape',show:false,price:[[65, 59, 4, 81, 56, 55, 40]]}]
+        var produce = [{name: 'Potato', show: false, price: [[65, 59, 80, 81, 56, 55, 40]]},
+            {name: 'Tomato', show: false, price: [[65, 59, 80, 81, 56, 0, 40]]},
+            {name: 'Corn', show: false, price: [[65, 59, 80, 81, 56, 7, 40]]},
+            {name: 'Ginger', show: false, price: [[65, 2, 80, 81, 56, 55, 40]]},
+            {name: 'Grape', show: false, price: [[65, 59, 4, 81, 56, 55, 40]]}]
 
         //line chart for demo
         mapApp.controller("LineCtrl", function ($rootScope) {
             $rootScope.labelsLine = ["January", "February", "March", "April", "May", "June", "July"];
             $rootScope.datalines = produce;
-           // $rootScope.dataline=[65, 59, 80, 81, 56, 55, 40];
+            // $rootScope.dataline=[65, 59, 80, 81, 56, 55, 40];
 
             $rootScope.seriesLine = ['Series A', 'Series B'];
 //          $rootScope.dataLine = [
@@ -162,20 +164,18 @@
 //              [28, 48, 40, 19, 5, 27, 90],
 //              [28, 48, 40, 19, 86, 5, 90],
 //              [28, 48, 1, 19, 86, 27, 90]
-//
 //            ];
-            $rootScope.dataLine=[[65, 59, 80, 81, 56, 55, 40]];
-
-            $rootScope.aa =[];
+            $rootScope.dataLine = [[65, 59, 80, 81, 56, 55, 40]];
 //            $rootScope.onClick = function (points, evt) {
 //                console.log(points, evt);
 //            };
         });
 
 
-        mapApp.controller("BarCtrl",['$rootScope', function ($rootScope) {
+        mapApp.controller("BarCtrl", ['$rootScope', function ($rootScope) {
             $rootScope.producesBar = produce;
-            $rootScope.labelsBar =['','','','','']; // To draw 5 bars
+            $rootScope.labelsBar = ['Potato', 'Tomato', 'Corn', 'Ginger', 'Grape']; // To draw 5 bars
+
             $rootScope.dataBar = [produceData];
         }]);
     </script>
@@ -190,13 +190,15 @@
         .produceChart {
             height: 400px;
             width: 100%;
-            padding-top: 10%;
+            padding-bottom: 0;
+            margin-bottom:15px;
             /*border: 2px solid black;*/
         }
+
         .produceChkbox {
-            height: 400px;
-            width: 100%;
-            padding-bottom: 10%;
+            /*height: 400px;*/
+            /*width: 100%;*/
+            padding-left: 80%;
             /*border: 2px solid black;*/
         }
 
@@ -225,24 +227,45 @@
             width: 20%;
             float: left;
         }
+
         @media (min-width: 768px) {
             .col-sm-15 {
                 width: 20%;
                 float: left;
             }
         }
+
         @media (min-width: 992px) {
             .col-md-15 {
                 width: 20%;
                 float: left;
             }
         }
+
         @media (min-width: 1200px) {
             .col-lg-15 {
                 width: 20%;
                 float: left;
             }
         }
+
+        input[type=checkbox]
+        { display:none; } /* to hide the checkbox itself */
+        input[type=checkbox] + label:before
+        {
+            font-family: FontAwesome;
+            display: inline-block;
+        }
+
+        input[type=checkbox] + label:before
+        { content: "\f096"; } /* unchecked icon */
+        input[type=checkbox] + label:before
+        { letter-spacing: 10px; } /* space between checkbox and label */
+
+        input[type=checkbox]:checked + label:before
+        { content: "\f046"; } /* checked icon */
+        input[type=checkbox]:checked + label:before
+        { letter-spacing: 5px; } /* allow space for check mark */
 
 
     </style>
