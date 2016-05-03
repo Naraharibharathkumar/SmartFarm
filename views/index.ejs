@@ -4,6 +4,7 @@
 <body>
 </div>
 <div class="container-fluid">
+    <div class="jumbotron" style="background:transparent !important" >
     <div class="row">
         <div class="col-xs-7 col-md-7">
             <div id="map-canvas">
@@ -25,8 +26,9 @@
     </div>
     <div class="row">
         <div class="col-md-15 col-sm-3" ng-repeat="produce in producesBar" ng-show="produce.show">
-            <div>{{produce.name}} price trend</div>
-            <div ng-controller="LineCtrl" id="lineChart">
+
+            <div class="text-center" ng-controller="LineCtrl" id="lineChart">
+                <label>{{produce.name}} price trend</label>
                 <canvas class="chart chart-line priceChart" chart-data="produce.price"
                         chart-labels="labelsLine" chart-legend="false" chart-series="produce.name"
                         chart-click="onClick">
@@ -34,6 +36,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>
