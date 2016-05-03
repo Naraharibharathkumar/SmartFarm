@@ -15,25 +15,6 @@ var remoteCall2= require('./routes/getGeocodeInfo');
 
 var app = express();
 
-/* PLEASE UNCOMMENT ONLY WHILE USING MONGODB WITH THIS APP*/
-/*
-var home = require('./routes/home');
-var mongoSessionConnectURL = "mongodb://localhost:27017/smartfarm";
-var expressSession = require("express-session");
-var mongoStore = require("connect-mongo")(expressSession);
-var mongo = require("./routes/mongo");
-
-app.use(expressSession({
-  secret: 'cmpe272_team9',
-  resave: false,  //don't save session if unmodified
-  saveUninitialized: false,	// don't create session until something stored
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
-  store: new mongoStore({
-    url: mongoSessionConnectURL
-  })
-}));
-*/
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

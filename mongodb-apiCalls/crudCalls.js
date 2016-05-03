@@ -25,7 +25,7 @@ exports.insertAreaData = function(jsonObj, res){
     var mongoDbObj = getMongoClient.mongoDbObj();
     console.log(jsonObj)
     for(var i=0;i<jsonObj.length;i++){
-        mongoDbObj.AreaSchema.insert(jsonObj[i],{w:1},function(err, result){
+        mongoDbObj.areaSchema.insert(jsonObj[i],{w:1},function(err, result){
             console.log(JSON.stringify(jsonObj[i]));
             if(err){
                 //res.write('Unable to write Data');
