@@ -1,13 +1,13 @@
 /**
  * Created by Bharath Kumar on 5/2/2016.
  */
-var ns = require('http')
-var path = process.argv.slice(2)
-
+var ns = require('http');
+var price = require('../mongodb-apiCalls/crudCalls');
+//__or=2015&year__or=2014&year__or=2013
 exports.getCropPrice = function(req, res) {
     ns.get({
         host: 'nass-api.azurewebsites.net',
-        path: '/api/api_get?source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&statisticcat_desc=PRICE%20RECEIVED&year__or=2015&year__or=2014&year__or=2013'
+        path: '/api/api_get?source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&statisticcat_desc=PRICE%20RECEIVED&year=2015'
     }, function doneSending(response) {
         console.log("Received Data and waiting for the end");
         var body = '';
@@ -27,13 +27,12 @@ exports.getCropPrice = function(req, res) {
 };
 
 function parseDataForPrice(jsonObj,res, callback){
-    var mainJson = {"dataArray" : []};
+    var mainJson = [];
     var tempJson = {};
-    var insertJson = {};
     for(var i=0;i<jsonObj.data.length;i++){
         tempJson = jsonObj.data[i];
         if((!(tempJson.value.indexOf("(")> -1))&&(tempJson.unit_desc.indexOf("$") > -1)){
-            mainJson.dataArray.push({
+            mainJson.push({
                 "commodity_desc" : tempJson.commodity_desc.toString(),
                 "class_desc" : tempJson.class_desc.toString(),
                 "statisticcat_desc" : tempJson.statisticcat_desc.toString(),
@@ -51,6 +50,5 @@ function parseDataForPrice(jsonObj,res, callback){
 };
 
 function displayData(res,mainData){
-    res.setHeader('Content-Type', 'application/json');
-    res.send(mainData);
+    price.insertPriceData(mainData,res);
 };

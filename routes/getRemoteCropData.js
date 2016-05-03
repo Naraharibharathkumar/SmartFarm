@@ -2,7 +2,6 @@
  * Created by Bharath Kumar on 5/3/2016.
  */
 var ns = require('http')
-var path = process.argv.slice(2)
 
 exports.getCropArea = function(req, res) {
     ns.get({
