@@ -30,8 +30,9 @@
                 replace: true,
                 link: function (scope, element, attrs) {
                     // SJSU coordinates
+                    var countyCode= 085;  // SANTA CLARA
                     var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
-                    var minZoomLevel = 5;
+                    var minZoomLevel = 11;
                     var mapOptions = {
                         center: myLatLng,
                         zoom: minZoomLevel,
@@ -44,12 +45,14 @@
                         draggingCursor: 'move'
                     };
                     var map = new google.maps.Map(document.getElementById(attrs.id), mapOptions);
+                    var geocoder = new google.maps.Geocoder;
+                    var infowindow = new google.maps.InfoWindow;
 
-                    // Bounds for California
+                    // Bounds for North America
                     // Constructs a rectangle from the points at its south-west and north-east corners.
                     var strictBounds = new google.maps.LatLngBounds(
-                            new google.maps.LatLng(22.70, -120.00),
-                            new google.maps.LatLng(40.00, -116.00)
+                            new google.maps.LatLng(28.70, -127.50),
+                            new google.maps.LatLng(48.85, -55.90)
                     );
 
                     // Put a marker on SJSU
@@ -60,9 +63,13 @@
                         position: myLatLng
                     });
 
+                    // default address
+                    infowindow.setContent(" SJSU, San Jose, CA 95192");
+                    infowindow.open(map, marker);
+
                     var circle = new google.maps.Circle({
                         map: map,
-                        radius: 8046.72,    // 10 miles in metres
+                        radius: 3*(1609.34),    // in metres
                         fillColor: '#00FF00',
                         strokeWeight: 1
                     });
@@ -72,7 +79,38 @@
                     google.maps.event.addListener(map, 'click', function (event) {
                         marker.setPosition(event.latLng);
                         circle.setCenter(event.latLng);
+
+                        // reverse geocode
+                        geocoder.geocode({'location': event.latLng}, function(results, status) {
+                            if (status === google.maps.GeocoderStatus.OK) {
+                                if (results[1]) {
+                                    infowindow.setContent(results[1].formatted_address);
+                                    infowindow.open(map, marker);
+                                } else {
+                                    window.alert('No results found');
+                                }
+                            } else {
+                                window.alert('Geocoder failed due to: ' + status);
+                            }
+                        });
                     });
+
+                    // if the marker is dragged, reset the address
+                    google.maps.event.addListener(marker, 'dragend', function() {
+
+                        // reverse geocode
+                        geocoder.geocode({'location': marker.getPosition()}, function(results, status) {
+                            if (status === google.maps.GeocoderStatus.OK) {
+                                if (results[1]) {
+                                    infowindow.setContent(results[1].formatted_address);
+                                } else {
+                                    infowindow.setContent(marker.getPosition().toString())
+                                }
+                            } else {
+                                window.alert('Geocoder failed due to: ' + status);
+                            }
+                        });
+                    } );
 
                     // Listen for the dragend event
                     google.maps.event.addListener(map, 'dragend', function () {
@@ -95,10 +133,10 @@
                         map.setCenter(new google.maps.LatLng(y, x));
                     });
 
-                    // Limit the zoom level
-                    google.maps.event.addListener(map, 'zoom_changed', function () {
-                        if (map.getZoom() < minZoomLevel) map.setZoom(minZoomLevel);
-                    });
+//                    // Limit the zoom level
+//                    google.maps.event.addListener(map, 'zoom_changed', function () {
+//                        if (map.getZoom() < minZoomLevel) map.setZoom(minZoomLevel);
+//                    });
                 }
             };
         });
