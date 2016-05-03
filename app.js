@@ -26,9 +26,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.get('/getData1', remoteCall.getCropPrice);
-app.get('/getData2', remoteCall1.getCropArea);
-app.get('/getGeo/', remoteCall2.getCountyName);
+app.get('/getPriceData', remoteCall.getCropPrice);
+app.get('/getCropData', remoteCall1.getCropArea);
+app.get('/getData', remoteCall2.getCountyName);
 //app.get('/dbconnection',home.checkDBConnection);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
