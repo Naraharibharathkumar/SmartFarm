@@ -25,6 +25,7 @@ exports.getCropArea = function(req, res) {
         });
     });
 };
+
 function parseDataForArea(jsonObj,res, callback){
     var mainJson = {"dataArray" : []};
     var tempJson = {};
@@ -37,17 +38,21 @@ function parseDataForArea(jsonObj,res, callback){
                 "class_desc" : tempJson.class_desc.toString(),
                 "statisticcat_desc" : tempJson.statisticcat_desc.toString(),
                 "unit_desc" : tempJson.unit_desc.toString(),
+                "agg_level_desc" : tempJson.agg_level_desc.toString(),
                 "state_name" : tempJson.state_name.toString(),
-                "county_ansi": tempJson.county_ansi,
-                "county_code": tempJson.county_code,
-                "county_name": tempJson.county_name,
+                "county_ansi" : tempJson.county_ansi,
+                "county_code" : tempJson.county_code,
+                "county_name" : tempJson.county_name,
+                "country_name" : tempJson.country_name.toString(),
                 "year" : tempJson.year.toString(),
+                "load_time" : tempJson.load_time.toString(),
                 "value": tempJson.value.toString()
             });
         }
     };
     callback(res,mainJson);
 };
+
 function displayData(res,mainData){
     res.setHeader('Content-Type', 'application/json');
     res.send(mainData);
