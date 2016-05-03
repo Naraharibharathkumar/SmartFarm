@@ -32,7 +32,8 @@ function parseDataForPrice(jsonObj,res, callback){
     for(var i=0;i<jsonObj.data.length;i++){
         tempJson = jsonObj.data[i];
         if((!(tempJson.value.indexOf("(")> -1))&&(tempJson.unit_desc.indexOf("$") > -1)){
-            mainJson.dataArray.push({"commodity_desc" : tempJson.commodity_desc.toString(),
+            mainJson.dataArray.push({
+                "commodity_desc" : tempJson.commodity_desc.toString(),
                 "class_desc" : tempJson.class_desc.toString(),
                 "statisticcat_desc" : tempJson.statisticcat_desc.toString(),
                 "unit_desc" : tempJson.unit_desc.toString(),

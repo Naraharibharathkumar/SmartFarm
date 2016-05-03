@@ -7,7 +7,7 @@ var path = process.argv.slice(2)
 exports.getCropArea = function(req, res) {
     ns.get({
         host: 'nass-api.azurewebsites.net',
-        path: 'api/api_get?agg_level_desc=COUNTY&source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&year__or=2015&year__or=2014&year__or=2013'
+        path: '/api/api_get?agg_level_desc=COUNTY&source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&year=2014'
     }, function doneSending(response) {
         console.log("Received Data and waiting for the end");
         var body = '';
@@ -31,12 +31,16 @@ function parseDataForArea(jsonObj,res, callback){
     var insertJson = {};
     for(var i=0;i<jsonObj.data.length;i++){
         tempJson = jsonObj.data[i];
-        if((!(tempJson.value.indexOf("(")> -1))&&(tempJson.unit_desc.indexOf("$") > -1)){
-            mainJson.dataArray.push({"commodity_desc" : tempJson.commodity_desc.toString(),
+        if((tempJson.unit_desc.indexOf("ACRES") > -1)&&(tempJson.statisticcat_desc.indexOf("AREA") > -1)){
+            mainJson.dataArray.push({
+                "commodity_desc" : tempJson.commodity_desc.toString(),
                 "class_desc" : tempJson.class_desc.toString(),
                 "statisticcat_desc" : tempJson.statisticcat_desc.toString(),
                 "unit_desc" : tempJson.unit_desc.toString(),
                 "state_name" : tempJson.state_name.toString(),
+                "county_ansi": tempJson.county_ansi,
+                "county_code": tempJson.county_code,
+                "county_name": tempJson.county_name,
                 "year" : tempJson.year.toString(),
                 "value": tempJson.value.toString()
             });
