@@ -6,8 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var apiCalls = require('./routes/apiCalls');
 var remoteCall = require('./routes/getRemotePriceData');
 var remoteCall1 = require('./routes/getRemoteAreaData');
 var remoteCall2= require('./routes/getGeocodeInfo');
@@ -28,8 +26,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
-app.get('/getData', apiCalls.getData);
 app.get('/getData1', remoteCall.getCropPrice);
 app.get('/getData2', remoteCall1.getCropArea);
 app.get('/getGeo/', remoteCall2.getCountyName);

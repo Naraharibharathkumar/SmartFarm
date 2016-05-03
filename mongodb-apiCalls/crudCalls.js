@@ -3,18 +3,16 @@
  */
 var getMongoClient = require('../mongo-Config/connectMongo')
 
-exports.areaSchemaSearch=function(req,res){
+exports.areaSchemaSearch = function(req,res){
     var mongoDbObj = getMongoClient.mongoDbObj();
     var commodity_array=[];
-    console.log("mongo connectivity"+mongoDbObj);
     mongoDbObj.areaSchema.distinct("commodity_desc" , { "county_name": "PENDLETON" } ,function(err,user){
         if(err){throw err;}
         else{
             if(user){
-                for(i=0;i<user.length;i++)
+                for(var i=0;i<user.length;i++)
                 {
                     console.log("commodity data is here" + user[i]);
-                   // comodity_array.push(user[i]);
                     mongoDbObj.areaSchema.find({$and: [{county_name: "PENDLETON"}, {commodity_desc: user[i]}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, user1){
                     if(err)throw err;
                         else{
@@ -41,11 +39,9 @@ exports.areaSchemaSearch=function(req,res){
                 console.log("Could not get the data");
             }
          
-        }//closing else
-    });//closing first query
-
-
-};//closing main function
+        }
+    });
+};
 
 
 exports.insertPriceData = function(jsonObj, res){
