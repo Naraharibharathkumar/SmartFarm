@@ -17,18 +17,21 @@
                         chart-data="dataBar" chart-labels="labelsBar" chart-series="series">
                 </canvas>
             </div>
-            <!--<div class="productChart">-->
-                <!--<span ng-repeat="produceName in producesBar"><input id="{{produceName.name}}" type="checkbox"-->
-                                                                    <!--ng-model="produceName[name]">{{ produceName.name }}</span>-->
-            <!--</div>-->
+            <div class="productChart">
+                <span ng-repeat="produce in producesBar"><input id="{{produce.name}}" type="checkbox"
+                                                                    ng-model="produce.show">{{ produce.name }}</span>
+
+            </div>
+
+
         </div>
     </div>
-    <div ng-show=""></div>
     <div class="row">
-        <div class="col-xs-12 col-md-12">
+        <div class="col-md-15 col-sm-3" ng-repeat="produce in producesBar" ng-show="produce.show">
+            <div>{{produce.name}} price trend</div>
             <div ng-controller="LineCtrl" id="lineChart">
-                <canvas id="line" class="chart chart-line priceChart" chart-data="dataLine"
-                        chart-labels="labelsLine" chart-legend="true" chart-series="seriesLine"
+                <canvas class="chart chart-line priceChart" chart-data="produce.price"
+                        chart-labels="labelsLine" chart-legend="false" chart-series="produce.name"
                         chart-click="onClick">
                 </canvas>
             </div>

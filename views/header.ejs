@@ -104,29 +104,40 @@
         });
 
         var produceData = [90, 80, 60, 20, 10] //replace with real data later
-        var produceName = [{name:'Potato'}, {name:'Tomato'}, {name:'Corn'}, {name:'Ginger'}, {name:'Grape'}] //replace with real data later
+        //var produceName = [{name:'Potato'}, {name:'Tomato'}, {name:'Corn'}, {name:'Ginger'}, {name:'Grape'}] //replace with real data later
+        var produce = [{name:'Potato',show:false, price:[[65, 59, 80, 81, 56, 55, 40]]},
+            {name:'Tomato',show:false,price:[[65, 59, 80, 81, 56, 0, 40]]},
+            {name:'Corn',show:false,price:[[65, 59, 80, 81, 56, 7, 40]]},
+            {name:'Ginger',show:false,price:[[65, 2, 80, 81, 56, 55, 40]]},
+            {name:'Grape',show:false,price:[[65, 59, 4, 81, 56, 55, 40]]}]
 
         //line chart for demo
         mapApp.controller("LineCtrl", function ($rootScope) {
             $rootScope.labelsLine = ["January", "February", "March", "April", "May", "June", "July"];
+            $rootScope.datalines = produce;
+           // $rootScope.dataline=[65, 59, 80, 81, 56, 55, 40];
+
             $rootScope.seriesLine = ['Series A', 'Series B'];
-            $rootScope.dataLine = [
-                [65, 59, 80, 81, 56, 55, 40],
-                [28, 48, 40, 19, 86, 27, 90]
-            ];
+//          $rootScope.dataLine = [
+//                [65, 59, 80, 81, 56, 55, 40],
+//                [28, 48, 40, 19, 86, 27, 90],
+//              [28, 48, 40, 19, 5, 27, 90],
+//              [28, 48, 40, 19, 86, 5, 90],
+//              [28, 48, 1, 19, 86, 27, 90]
+//
+//            ];
+            $rootScope.dataLine=[[65, 59, 80, 81, 56, 55, 40]];
+
+            $rootScope.aa =[];
 //            $rootScope.onClick = function (points, evt) {
 //                console.log(points, evt);
 //            };
         });
 
-        //var $scope=[];
 
-        //bar chart for demo
         mapApp.controller("BarCtrl",['$rootScope', function ($rootScope) {
-            $rootScope.producesBar = produceName;
+            $rootScope.producesBar = produce;
             $rootScope.labelsBar =['','','','','']; // To draw 5 bars
-            //$scope.labels = produceName;
-            // $scope.series = ['Series A'];
             $rootScope.dataBar = [produceData];
         }]);
     </script>
@@ -141,7 +152,13 @@
         .produceChart {
             height: 400px;
             width: 100%;
-            padding-top: 20%;
+            padding-top: 10%;
+            /*border: 2px solid black;*/
+        }
+        .produceChkbox {
+            height: 400px;
+            width: 100%;
+            padding-bottom: 10%;
             /*border: 2px solid black;*/
         }
 
@@ -155,6 +172,41 @@
         body {
             margin: 10px 10px 10px 10px;
         }
+
+        .col-xs-15,
+        .col-sm-15,
+        .col-md-15,
+        .col-lg-15 {
+            position: relative;
+            min-height: 1px;
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        .col-xs-15 {
+            width: 20%;
+            float: left;
+        }
+        @media (min-width: 768px) {
+            .col-sm-15 {
+                width: 20%;
+                float: left;
+            }
+        }
+        @media (min-width: 992px) {
+            .col-md-15 {
+                width: 20%;
+                float: left;
+            }
+        }
+        @media (min-width: 1200px) {
+            .col-lg-15 {
+                width: 20%;
+                float: left;
+            }
+        }
+
+
     </style>
 
     <div class="container-fluid">
