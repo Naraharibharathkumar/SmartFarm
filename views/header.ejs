@@ -214,22 +214,48 @@
 
                 //line chard
                 $rootScope.producesBar = data;
-                $rootScope.selected = false;
 
-
-                $rootScope.selectChart = function(index) {
-                    $rootScope.selected = true;
-                    var array = [];
-                    array.push(data[index].price);
-                    $rootScope.dataLine = array;
-                    $rootScope.year = data[index].year;
-                    $rootScope.name = data[index].name;
-                    $rootScope.unit = data[index].unit;
-                }
             }).error(function (data) {
                 // log error
             });
+            $rootScope.mapSelect=function (latitude,longitude) {
 
+
+                $http.get('/getData').success(function (data) {
+                    console.log(produce);
+                    //JSON.parse(data);
+                    produce = data;
+                    $rootScope.produces = data;
+                    $rootScope.labelsBar = [];
+                    var arcArr = [];
+                    $rootScope.dataBar = [];
+
+                    for (i = 0; i < produce.length; i++) {
+                        $rootScope.labelsBar.push(produce[i].name);
+                        console.log("labels bar values" + $rootScope.labelsBar);
+                        arcArr.push(data[i].arc);
+                    }
+                    $rootScope.dataBar.push(arcArr);
+                    console.log("rootScope.dataBar" + $rootScope.dataBar);
+                    $rootScope.barCtrlFlag = false;
+                    $rootScope.dataCtrlFlag = false;
+                    $rootScope.dataHasLoaded = true;
+
+                })
+            }//closing map select function
+
+            $rootScope.selected = false;
+
+
+            $rootScope.selectChart = function(index) {
+                $rootScope.selected = true;
+                var array = [];
+                array.push($rootScope.produces[index].price);
+                $rootScope.dataLine = array;
+                $rootScope.year =  $rootScope.produces[index].year;
+                $rootScope.name =  $rootScope.produces[index].name;
+                $rootScope.unit =  $rootScope.produces[index].unit;
+            }
         });
 
     </script>
