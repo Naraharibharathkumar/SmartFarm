@@ -6,6 +6,9 @@ var ns = require('http');
 var xml2js = require('xml2js');
 
 exports.getCountyName = function(lat, long,res, callback) {
+
+    // var lat= 37.3352;
+    // var long= -121.8811;
     var pathToGo = "/api/block/2010/find?latitude="+ lat+ "&longitude=" + long;
     ns.get({
         host: 'data.fcc.gov',
@@ -21,9 +24,18 @@ exports.getCountyName = function(lat, long,res, callback) {
             console.log('No more data in response');
             var parser = new xml2js.Parser();
             parser.parseString(body, function(err,rslt){
+
                 var countyObjectStr= JSON.stringify(rslt['Response']['County']);
-                var finalObj = countyObjectStr.slice(1, countyObjectStr.indexOf("]"));
-                callback(res,JSON.parse(finalObj).$.name);
+                var stateObjectStr= JSON.stringify(rslt['Response']['State']);
+
+                var finalCountyObj = countyObjectStr.slice(1, countyObjectStr.indexOf("]"));
+                var finalStateObj = stateObjectStr.slice(1, stateObjectStr.indexOf("]"));
+
+                var countyStateJsonStr= "{ \"state\" : \"" + JSON.parse(finalStateObj).$.name +
+                        "\", \"county\": \"" + JSON.parse(finalCountyObj).$.name + "\" }";
+                // console.log(countyStateJsonStr);
+
+                callback(res,JSON.parse(countyStateJsonStr));
             })
         });
         response.on('error', function (errorDisplay) {
