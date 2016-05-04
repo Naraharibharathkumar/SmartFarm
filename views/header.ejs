@@ -205,15 +205,23 @@
             console.log($rootScope.labelsBar);
         }]);
 
-//        $(document).ready(function(){
-//            $.ajax({ url: "/getData",
-//                //context: document.body,
-//                success: function(data){
-//                    produce = data;
-//                    alert("done");
-//                }});
-//        });
+        $(document).ready(function(){
+            console.log("calling ajax");
+           getAjax();
+            console.log("called ajax");
 
+        });
+
+        function getAjax(){
+            $.ajax({
+                type:"GET",
+                url: "/getData",
+                //context: document.body,
+                success: function(data){
+                    produce = data;
+                    alert("done");
+                }});
+        }
     </script>
 
     <style>
