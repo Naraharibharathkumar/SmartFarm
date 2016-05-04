@@ -126,6 +126,7 @@ function sendCropData(res,jsonArray, cropPriceData) {
         });
     });
     if (cropJSON.cropData.length > 0) {
+        console.log(cropJSON.cropData)
         res.setHeader('Content-Type', 'application/json');
         res.send(cropJSON.cropData);
     }
