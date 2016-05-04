@@ -127,11 +127,11 @@ function sendCropData(res,jsonArray, cropPriceData) {
     });
     if (cropJSON.cropData.length > 0) {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(cropJSON.cropData));
+        res.send(cropJSON.cropData);
     }
     else {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(cropJSON.cropData));
+        res.send(cropJSON.cropData);
     }
 }
 
