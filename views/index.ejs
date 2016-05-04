@@ -6,13 +6,13 @@
 <div class="container-fluid">
     <div class="jumbotron" style="background:transparent !important" >
     <div class="row">
-        <div class="col-xs-7 col-md-7">
+        <div class="col-xs-5 col-md-5">
             <div id="map-canvas">
                 google map
                 <my-maps id="map-canvas"></my-maps>
             </div>
         </div>
-        <div class="col-xs-5 col-md-5" ng-controller="BarCtrl">
+        <div class="col-xs-7 col-md-7" ng-controller="BarCtrl">
             <div class="produceChart" id="barChart">
                 <div class="produceChkbox" ng-repeat="produce in producesBar">
                     <input id="{{produce.name}}" type="checkbox" ng-model="produce.show">
