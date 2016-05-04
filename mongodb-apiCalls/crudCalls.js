@@ -4,17 +4,47 @@
 
 var getMongoClient = require('../mongo-Config/connectMongo');
 
-exports.getAreaData = function(res, countyName, callback){
+exports.getAreaData = function(res, countyName){
     var mongoDbObj = getMongoClient.mongoDbObj();
-    var result = getDistinctCrops(res, mongoDbObj, countyName, callback);
+    getDistinctCrops(res, mongoDbObj, countyName);
 };
+
+
+function getDistinctCrops(res, mongoDbObj, countyName){
+    mongoDbObj.areaSchema.distinct("commodity_desc" , { "county_name": countyName } ,function(err,result){
+        if(err){
+            throw err;
+        }
+        else{
+            if(result.length > 0){
+                getCropAreaData(res, mongoDbObj, countyName, result);
+            }
+        }
+    })
+}
+
+
+function getCropAreaData(res,mongoDbObj, countyName,result){
+    mongoDbObj.areaSchema.find({$and: [{county_name: countyName}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, rslt){
+        if(err){
+            throw err;
+        }
+        else{
+            if(rslt.length > 0){
+                getAverageArea(res,mongoDbObj, countyName, result, rslt);
+            }
+            else{
+                console.log("could not get data");
+            }
+        }
+
+    });
+}
 
 function getAverageArea(res, mongoDbObj, countyName, result, rslt){
     var k = 0;
     var jsonArray = [];
     var avg = 0;
-    console.log(result);
-    console.log(rslt);
     result.forEach(function(childResult){
         rslt.forEach(function(childRslt){
             if(childRslt.commodity_desc == childResult){
@@ -54,7 +84,6 @@ function getCropPriceData(res, mongoDbObj, countyName, result, jsonArray){
         }
     }
     getPriceData(0)
-    
 }
 
 function sendCropData(res,jsonArray, cropPriceData) {
@@ -109,47 +138,17 @@ function sendCropData(res,jsonArray, cropPriceData) {
     }
 }
 
-function getCropAreaData(res,mongoDbObj, countyName,result, callback){
-    mongoDbObj.areaSchema.find({$and: [{county_name: countyName}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, rslt){
-        if(err){
-            throw err;
-        }
-        else{
-            if(rslt.length > 0){
-                getAverageArea(res,mongoDbObj, countyName, result, rslt);
-            }
-            else{
-                console.log("could not get data");
-            }
-        }
-
-    });
-}
-
-function getDistinctCrops(res,mongoDbObj, countyName, callback){
-    mongoDbObj.areaSchema.distinct("commodity_desc" , { "county_name": countyName } ,function(err,result){
-        if(err){
-            throw err;
-        }
-        else{
-            if(result.length > 0){
-                getCropAreaData(res,mongoDbObj,countyName, result, callback);
-            }
-        }
-    })
-}
-
 exports.insertPriceData = function(jsonObj, res){
     var mongoDbObj = getMongoClient.mongoDbObj();
     jsonObj.forEach(function(childJsonObj){
-        mongoDbObj.priceSchema.insert(childJsonObj,{w:1},function(err, result){
+        mongoDbObj.priceSchema.insert(childJsonObj,{w:1},function(err){
             if(err){
-                //res.write('Unable to write Data');
-                //res.end();
+                res.write('Unable to write Data');
+                res.end();
             }
             else{
-                //res.write('Data Success');
-                //res.end();
+                res.write('Data Success');
+                res.end();
             }
         });
     });
@@ -159,14 +158,14 @@ exports.insertAreaData = function(jsonObj, res){
     var mongoDbObj = getMongoClient.mongoDbObj();
     console.log(jsonObj);
     jsonObj.forEach(function(childJsonObj){
-        mongoDbObj.areaSchema.insert(childJsonObj,{w:1},function(err, result){
+        mongoDbObj.areaSchema.insert(childJsonObj,{w:1},function(err){
             if(err){
-                //res.write('Unable to write Data');
-                //res.end();
+                res.write('Unable to write Data');
+                res.end();
             }
             else{
-                //res.write('Data Success');
-                //res.end();
+                res.write('Data Success');
+                res.end();
             }
         });
     });

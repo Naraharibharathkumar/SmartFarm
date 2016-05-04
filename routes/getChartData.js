@@ -14,10 +14,5 @@ exports.getCropData = function(req, res){
 
 function getCropArea(res,countyName){
     console.log(countyName);
-    mongoData.getAreaData(res,"PENDLETON", sendData);
+    mongoData.getAreaData(res,"PENDLETON");
 };
-
-function sendData(res, data){
-    res.setHeader('Content-Type', 'application/json');
-    res.send(data);
-}
