@@ -31,8 +31,11 @@ exports.getCountyName = function(lat, long,res, callback) {
                 var finalCountyObj = countyObjectStr.slice(1, countyObjectStr.indexOf("]"));
                 var finalStateObj = stateObjectStr.slice(1, stateObjectStr.indexOf("]"));
 
-                var countyStateJsonStr= "{ \"state\" : \"" + JSON.parse(finalStateObj).$.name +
-                        "\", \"county\": \"" + JSON.parse(finalCountyObj).$.name + "\" }";
+               var countyName= JSON.parse(finalCountyObj).$.name;
+                var stateName= JSON.parse(finalStateObj).$.name;
+
+                var countyStateJsonStr= "{ \"state\" : \"" + stateName.toUpperCase() +
+                        "\", \"county\": \"" +  countyName.toUpperCase() + "\" }";
                 // console.log(countyStateJsonStr);
 
                 callback(res,JSON.parse(countyStateJsonStr));
