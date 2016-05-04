@@ -5,9 +5,18 @@ var ns = require('http')
 var area = require('../mongodb-apiCalls/crudCalls');
 
 exports.getCropArea = function(req, res) {
+    var customDate = parseInt(new Date().getFullYear());
+    var yearArray = [
+        customDate-1,
+        customDate-2,
+        customDate-3,
+        customDate-4,
+        customDate-5,
+        customDate-6
+    ];
     ns.get({
         host: 'nass-api.azurewebsites.net',
-        path: '/api/api_get?agg_level_desc=COUNTY&source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&year=2014'
+        path: '/api/api_get?agg_level_desc=COUNTY&source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&year__or='+yearArray[0]+'&year__or='+yearArray[1]+'&year__or='+yearArray[2]+'&year__or='+yearArray[3]
     }, function doneSending(response) {
         console.log("Received Data and waiting for the end");
         var body = '';

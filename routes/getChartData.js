@@ -6,13 +6,12 @@ var geoData = require('./getGeocodeInfo');
 var mongoData = require('../mongodb-apiCalls/crudCalls');
 
 exports.getCropData = function(req, res){
-    var lat= 45.674564;
-    var long= -118.817853;
+    var lat= 37.3352;
+    var long= -121.8811;
     geoData.getCountyName(lat, long,res, getCropArea);
-
 };
 
 function getCropArea(res,countyName){
-    console.log(countyName);
-    mongoData.getAreaData(res,"PENDLETON");
+    var locationName ={ "state" : "CALIFORNIA", "county" : "PENDLETON"};
+    mongoData.getAreaData(res, locationName);
 };

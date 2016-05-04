@@ -3,11 +3,21 @@
  */
 var ns = require('http');
 var price = require('../mongodb-apiCalls/crudCalls');
-//__or=2015&year__or=2014&year__or=2013
+
+
 exports.getCropPrice = function(req, res) {
+    var customDate = parseInt(new Date().getFullYear());
+    var yearArray = [
+        customDate-1,
+        customDate-2,
+        customDate-3,
+        customDate-4,
+        customDate-5,
+        customDate-6
+    ];
     ns.get({
         host: 'nass-api.azurewebsites.net',
-        path: '/api/api_get?source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&statisticcat_desc=PRICE%20RECEIVED&year=2015'
+        path: '/api/api_get?source_desc=SURVEY&sector_desc=CROPS&group_desc=FIELD%20CROPS&statisticcat_desc=PRICE%20RECEIVED&year__or='+yearArray[0]+'&year__or='+yearArray[1]+'&year__or='+yearArray[2]+'&year__or='+yearArray[3]
     }, function doneSending(response) {
         console.log("Received Data and waiting for the end");
         var body = '';

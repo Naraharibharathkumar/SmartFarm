@@ -4,34 +4,34 @@
 
 var getMongoClient = require('../mongo-Config/connectMongo');
 
-exports.getAreaData = function(res, countyName){
+exports.getAreaData = function(res, locationName){
     var mongoDbObj = getMongoClient.mongoDbObj();
-    getDistinctCrops(res, mongoDbObj, countyName);
+    getDistinctCrops(res, mongoDbObj, locationName);
 };
 
 
-function getDistinctCrops(res, mongoDbObj, countyName){
-    mongoDbObj.areaSchema.distinct("commodity_desc" , { "county_name": countyName } ,function(err,result){
+function getDistinctCrops(res, mongoDbObj, locationName){
+    mongoDbObj.areaSchema.distinct("commodity_desc" , { "county_name": locationName.county } ,function(err,result){
         if(err){
             throw err;
         }
         else{
             if(result.length > 0){
-                getCropAreaData(res, mongoDbObj, countyName, result);
+                getCropAreaData(res, mongoDbObj, locationName, result);
             }
         }
     })
 }
 
 
-function getCropAreaData(res,mongoDbObj, countyName,result){
-    mongoDbObj.areaSchema.find({$and: [{county_name: countyName}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, rslt){
+function getCropAreaData(res,mongoDbObj, locationName,result){
+    mongoDbObj.areaSchema.find({$and: [{county_name: locationName.county}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, rslt){
         if(err){
             throw err;
         }
         else{
             if(rslt.length > 0){
-                getAverageArea(res,mongoDbObj, countyName, result, rslt);
+                getAverageArea(res,mongoDbObj, locationName, result, rslt);
             }
             else{
                 console.log("could not get data");
@@ -41,7 +41,7 @@ function getCropAreaData(res,mongoDbObj, countyName,result){
     });
 }
 
-function getAverageArea(res, mongoDbObj, countyName, result, rslt){
+function getAverageArea(res, mongoDbObj, locationName, result, rslt){
     var k = 0;
     var jsonArray = [];
     var avg = 0;
@@ -57,14 +57,14 @@ function getAverageArea(res, mongoDbObj, countyName, result, rslt){
         jsonArray.push({"cropName" : childResult, "cropAcres" : avg});
         avg = 0;
     });
-    getCropPriceData(res, mongoDbObj, countyName, result, jsonArray);
+    getCropPriceData(res, mongoDbObj, locationName, result, jsonArray);
 }
 
-function getCropPriceData(res, mongoDbObj, countyName, result, jsonArray){
+function getCropPriceData(res, mongoDbObj, locationName, result, jsonArray){
     var cropPriceData = {"PriceData" : []};
     function getPriceData(i) {
         if( i < result.length ) {
-            mongoDbObj.priceSchema.find({$and:[{state_name:"ILLINOIS"},{commodity_desc: result[i]}]},{_id:0}).toArray( function(err, rslt){
+            mongoDbObj.priceSchema.find({$and:[{state_name: locationName.state},{commodity_desc: result[i]}]},{_id:0}).toArray( function(err, rslt){
                 if( err ) {
                     console.log('error: '+err)
                 }
@@ -79,7 +79,6 @@ function getCropPriceData(res, mongoDbObj, countyName, result, jsonArray){
             });
         }
         if(i==result.length){
-            console.log(cropPriceData);
             sendCropData(res, jsonArray, cropPriceData);
         }
     }
@@ -88,8 +87,6 @@ function getCropPriceData(res, mongoDbObj, countyName, result, jsonArray){
 
 function sendCropData(res,jsonArray, cropPriceData) {
     var cropJSON = {"cropData": []};
-    console.log(jsonArray)
-    console.log(cropPriceData.PriceData)
     jsonArray.forEach(function (cropDetail) {
         cropPriceData.PriceData.forEach(function (priceData) {
             if (cropDetail.cropName == priceData.commodity_desc) {
@@ -143,12 +140,12 @@ exports.insertPriceData = function(jsonObj, res){
     jsonObj.forEach(function(childJsonObj){
         mongoDbObj.priceSchema.insert(childJsonObj,{w:1},function(err){
             if(err){
-                res.write('Unable to write Data');
-                res.end();
+                //res.write('Unable to write Data');
+                //res.end();
             }
             else{
-                res.write('Data Success');
-                res.end();
+                //res.write('Data Success');
+                //res.end();
             }
         });
     });
@@ -160,12 +157,12 @@ exports.insertAreaData = function(jsonObj, res){
     jsonObj.forEach(function(childJsonObj){
         mongoDbObj.areaSchema.insert(childJsonObj,{w:1},function(err){
             if(err){
-                res.write('Unable to write Data');
-                res.end();
+               // res.write('Unable to write Data');
+               // res.end();
             }
             else{
-                res.write('Data Success');
-                res.end();
+               // res.write('Data Success');
+               // res.end();
             }
         });
     });
