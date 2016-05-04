@@ -26,6 +26,31 @@
 
 
     <script>
+        var produce;
+
+        var produce = [{name: 'Potato', arc:900, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800], price: [65, 59, 80, 81, 56, 55, 40]},
+            {name: 'Tomato', arc:800, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [65, 59, 80, 81, 56, 0, 40]},
+            {name: 'Corn', arc:700, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [65, 59, 80, 81, 56, 7, 40]},
+            {name: 'Ginger', arc:500, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [65, 2, 80, 81, 56, 55, 40]},
+            {name: 'Grape', arc:200, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800],price: [0.1, 0.3, 0.4, 8.1, 5.6, 5.5, 4]}]
+
+//        $(document).ready(function(){
+//            getAjax();
+//            console.log("called ajax");
+//
+//        });
+//
+//        function getAjax(){
+//            $.ajax({
+//                type:"GET",
+//                url: "/getData",
+//                context: document.body,
+//                success: function(data){
+//                    produce = data;
+//                    console.log(produce);
+//                }});
+//        }
+
         var mapApp = angular.module("mapApp", ["chart.js"]);
         mapApp.directive("myMaps", function () {
             return {
@@ -84,7 +109,7 @@
                     google.maps.event.addListener(map, 'click', function (event) {
                         marker.setPosition(event.latLng);
                         circle.setCenter(event.latLng);
-
+                        //getAjax();
                         // call getCountyName(event.latLng.latitude, event.latLng.longitude)
 
                         // reverse geocode
@@ -149,77 +174,128 @@
             };
         });
 
-        var produce = [{name: 'Potato', arc:900, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 55, 40]]},
-            {name: 'Tomato', arc:800, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 0, 40]]},
-            {name: 'Corn', arc:700, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 7, 40]]},
-            {name: 'Ginger', arc:500, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 2, 80, 81, 56, 55, 40]]},
-            {name: 'Grape', arc:200, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800],price: [[0.1, 0.3, 0.4, 8.1, 5.6, 5.5, 4]]}]
 
 //        mapApp.controller("mainCtrl",function($rootScope,$http){
-//            function getData(){
+//            $rootScoope.init =  function getData(){
 //                $http
 //                        .get("/getData", {
-//                            params: {
-//                                lat: myLatLng.latitude,
-//                                lon: myLatLng.longitude,
-//
-//                            }
+////                            params: {
+////                                lat: myLatLng.latitude,
+////                                lon: myLatLng.longitude,
+////
+////                            }
 //                        })
 //                        .success(function (data) {
 //                            produce = data;
 //                        }
 //            }
-//        })
-        //price line chart
-        mapApp.controller("LineCtrl", function ($rootScope) {
-            $rootScope.producesBar = produce;
-            $rootScope.selected = false;
+//        });
 
-
-
-            $rootScope.selectChart = function(index){
-                $rootScope.selected = true;
-                $rootScope.dataLine = produce[index].price;
-                $rootScope.year = produce[index].year;
-                $rootScope.name = produce[index].name;
-                $rootScope.unit = produce[index].unit;
-                console.log($rootScope.dataLine);
-            }
-        });
 
         //arc bar chart
-        mapApp.controller("BarCtrl", ['$rootScope', function ($rootScope) {
 
-            $rootScope.labelsBar = [];
-            var arcArr =[];
-            $rootScope.dataBar = [];
+        mapApp.controller("BarCtrl", function ($rootScope, $http) {
+            $rootScope.barCtrlFlag = true;
+//
+            $rootScope.dataCtrlFlag = true;
 
-            for(i=0;i<produce.length;i++) {
-                $rootScope.labelsBar.push(produce[i].name) ;
 
-                arcArr.push(produce[i].arc)
+//            $rootScope.getData = function() {
+                $http.get('/getData').success(function (data) {
+                    console.log(produce);
+                    //JSON.parse(data);
+                    produce = data;
+                    $rootScope.produces = data;
+                    console.log(data);
+                    console.log(produce);
+                    console.log($rootScope.produces);
+                    $rootScope.labelsBar = [];
+                    var arcArr =[];
+                    $rootScope.dataBar = [];
+                   //  $rootScope.labelsBar=data;
+                   // console.log("labelsbase dayta"+$rootScope.labelsBar.name)
+                    //console.log("1" + $rootScope + produces);
+
+                  for(i=0;i<produce.length;i++) {
+                      $rootScope.labelsBar.push(produce[i].name) ;
+                      console.log("labels bar values"+$rootScope.labelsBar);
+                        arcArr.push(data[i].arc);
+                    }
+                    $rootScope.dataBar.push(arcArr);
+                    console.log("rootScope.dataBar"+$rootScope.dataBar);
+                    $rootScope.barCtrlFlag=false;
+                    $rootScope.dataCtrlFlag=false;
+                    $rootScope.dataHasLoaded = true;
+
+
+
+                    //line chard
+                    $rootScope.producesBar = data;
+                    $rootScope.selected = false;
+
+
+            $rootScope.selectChart = function(index) {
+                $rootScope.selected = true;
+                var array = [];
+//                array.push(produce[index].price);
+//                $rootScope.dataLine = array;
+//                $rootScope.year = produce[index].year;
+//                $rootScope.name = produce[index].name;
+//                $rootScope.unit = produce[index].unit;
+                array.push(data[index].price);
+                $rootScope.dataLine = array;
+                $rootScope.year = data[index].year;
+                $rootScope.name = data[index].name;
+                $rootScope.unit = data[index].unit;
+                console.log(data[index].year);
+                console.log(data[index].name);
+                console.log(data[index].unit);
             }
-            $rootScope.dataBar.push(arcArr);
-            console.log($rootScope.labelsBar);
-        }]);
+                }).error(function (data) {
+                    // log error
+                });
 
-        $(document).ready(function(){
-            console.log("calling ajax");
-           getAjax();
-            console.log("called ajax");
+    //  }
+
+
+
+            //$rootScope.produces = produce;
+//            $rootScope.labelsBar = [];
+//            var arcArr =[];
+//            $rootScope.dataBar = [];
+//            //console.log("1" + $rootScope + produces);
+//            for(i=0;i<produce.length;i++) {
+//                $rootScope.labelsBar.push($rootScope.produces[i].name) ;
+//                //$rootScope.labelsBar.push(produce[i].name) ;
+//                arcArr.push($rootScope.produces[i].arc)
+//                //arcArr.push(produce[i].arc)
+//            }
+//            $rootScope.dataBar.push(arcArr);
+//
+//            //$rootScope.producesBar = $rootScope.produces
+//            $rootScope.producesBar = produce;
+//            $rootScope.selected = false;
+
+            //line chart
+//            $rootScope.selectChart = function(index){
+//                $rootScope.selected = true;
+//                var array=[];
+////                array.push(produce[index].price);
+////                $rootScope.dataLine = array;
+////                $rootScope.year = produce[index].year;
+////                $rootScope.name = produce[index].name;
+////                $rootScope.unit = produce[index].unit;
+//                array.push($rootScope.produces[index].price);
+//                $rootScope.dataLine = array;
+//                $rootScope.year = $rootScope.produces[index].year;
+//                $rootScope.name = $rootScope.produces[index].name;
+//                $rootScope.unit = $rootScope.produces[index].unit;
+
+//            }
 
         });
 
-        function getAjax(){
-            $.ajax({
-                type:"GET",
-                url: "/getData",
-                //context: document.body,
-                success: function(data){
-                    produce = data;
-                    alert("done");
-                }});
-        }
+
     </script>
 
     <style>
@@ -337,7 +413,6 @@
             background-color: #3e8e41;
             box-shadow: 0 5px #666;
             transform: translateY(4px);
-        }
 
 
     </style>
