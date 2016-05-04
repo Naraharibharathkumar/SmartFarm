@@ -6,34 +6,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var apiCalls = require('./routes/apiCalls');
 var remoteCall = require('./routes/getRemotePriceData');
-var remoteCall1 = require('./routes/getRemoteCropData');
-var remoteCall2= require('./routes/getGeocodeInfo');
+var remoteCall1 = require('./routes/getRemoteAreaData');
+var remoteCall2= require('./routes/getChartData');
 
 
 var app = express();
 
-/* PLEASE UNCOMMENT ONLY WHILE USING MONGODB WITH THIS APP*/
-/*
-var home = require('./routes/home');
-var mongoSessionConnectURL = "mongodb://localhost:27017/smartfarm";
-var expressSession = require("express-session");
-var mongoStore = require("connect-mongo")(expressSession);
-var mongo = require("./routes/mongo");
-
-app.use(expressSession({
-  secret: 'cmpe272_team9',
-  resave: false,  //don't save session if unmodified
-  saveUninitialized: false,	// don't create session until something stored
-  duration: 30 * 60 * 1000,
-  activeDuration: 5 * 60 * 1000,
-  store: new mongoStore({
-    url: mongoSessionConnectURL
-  })
-}));
-*/
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -47,11 +26,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
-app.get('/getData', apiCalls.getData);
-app.get('/getData1', remoteCall.getCropPrice);
-app.get('/getData2', remoteCall1.getCropArea);
-app.get('/getGeo/', remoteCall2.getCountyName);
+app.get('/getPriceData', remoteCall.getCropPrice);
+app.get('/getCropData', remoteCall1.getCropArea);
+app.get('/getData', remoteCall2.getCropData);
 //app.get('/dbconnection',home.checkDBConnection);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
