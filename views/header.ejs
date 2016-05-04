@@ -56,24 +56,16 @@
         }
     </style>
     <script>
-        var produce;
-
-        var produce = [{name: 'Potato', arc:900, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800], price: [65, 59, 80, 81, 56, 55, 40]},
-            {name: 'Tomato', arc:800, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [65, 59, 80, 81, 56, 0, 40]},
-            {name: 'Corn', arc:700, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [65, 59, 80, 81, 56, 7, 40]},
-            {name: 'Ginger', arc:500, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [65, 2, 80, 81, 56, 55, 40]},
-            {name: 'Grape', arc:200, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800],price: [0.1, 0.3, 0.4, 8.1, 5.6, 5.5, 4]}]
-
+        var produce = [];
         var mapApp = angular.module("mapApp", ["chart.js"]);
         mapApp.directive("myMaps", function () {
             return {
+                controller: 'BarCtrl',
                 restrict: 'E',
-                template: '<div></div>',
+                template: '<div myMaps callback-fn="mapSelect(arg1)"></div>',
                 replace: true,
                 link: function (scope, element, attrs) {
-                    // SJSU coordinates
-                    // County: SANTA CLARA
-                    var myLatLng = new google.maps.LatLng(37.3352, -121.8811);
+                    var myLatLng = new google.maps.LatLng(44.49234205613122, -99.55810546875);
                     var minZoomLevel = 11;
                     var mapOptions = {
                         center: myLatLng,
@@ -82,7 +74,7 @@
                         zoomControlOptions: {
                             style: google.maps.ZoomControlStyle.SMALL
                         },
-                        mapTypeId: google.maps.MapTypeId.TERRAIN,
+                        mapTypeId: google.maps.MapTypeId.HYBRID,
                         draggableCursor: 'crosshair',
                         draggingCursor: 'move'
                     };
@@ -107,8 +99,8 @@
                     // call getCountyName(myLatLng.latitude, myLatLng.longitude)
 
                     // default address
-                    infowindow.setContent(" SJSU, San Jose, CA 95192");
-                    infowindow.open(map, marker);
+                    //infowindow.setContent(" SJSU, San Jose, CA 95192");
+                    //infowindow.open(map, marker);
 
                     var circle = new google.maps.Circle({
                         map: map,
@@ -116,7 +108,13 @@
                         fillColor: '#00FF00',
                         strokeWeight: 1
                     });
+                    //scope.mapSelect(myLatLng.lat(), myLatLng.lng());
+                    getTopCrops(myLatLng.lat(), myLatLng.lng());
                     circle.bindTo('center', marker, 'position');
+
+                    function getTopCrops(obj1, obj2){
+                        scope.mapSelect(obj1, obj2);
+                    }
 
                     // move the marker on click events
                     google.maps.event.addListener(map, 'click', function (event) {
@@ -124,7 +122,8 @@
                         circle.setCenter(event.latLng);
                         //getAjax();
                         // call getCountyName(event.latLng.latitude, event.latLng.longitude)
-
+                        //scope.mapSelect(event.latLng.lat(), event.latLng.lng());
+                        getTopCrops(event.latLng.lat(), event.latLng.lng())
                         // reverse geocode
                         geocoder.geocode({'location': event.latLng}, function (results, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
@@ -148,6 +147,7 @@
                         geocoder.geocode({'location': marker.getPosition()}, function (results, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
                                 if (results[1]) {
+                                    getTopCrops(marker.getPosition().lat(), marker.getPosition().lng())
                                     infowindow.setContent(results[1].formatted_address);
                                 } else {
                                     infowindow.setContent(marker.getPosition().toString())
@@ -189,7 +189,7 @@
             $rootScope.barCtrlFlag = true;
 //
             $rootScope.dataCtrlFlag = true;
-
+            /*
             $http.get('/getData').success(function (data) {
                 console.log(produce);
                 //JSON.parse(data);
@@ -218,30 +218,36 @@
             }).error(function (data) {
                 // log error
             });
-            $rootScope.mapSelect=function (latitude,longitude) {
-
-
-                $http.get('/getData').success(function (data) {
-                    console.log(produce);
+            */
+            $rootScope.mapSelect = function (obj1, obj2) {
+                var path = '/getData?lat='+obj1+'&long='+obj2
+                $http.get(path).success(function (data) {
                     //JSON.parse(data);
                     produce = data;
                     $rootScope.produces = data;
                     $rootScope.labelsBar = [];
-                    var arcArr = [];
+                    var arcArr =[];
                     $rootScope.dataBar = [];
 
-                    for (i = 0; i < produce.length; i++) {
-                        $rootScope.labelsBar.push(produce[i].name);
-                        console.log("labels bar values" + $rootScope.labelsBar);
+                    for(i=0;i<produce.length;i++) {
+                        $rootScope.labelsBar.push(produce[i].name) ;
+                        console.log("labels bar values"+$rootScope.labelsBar);
                         arcArr.push(data[i].arc);
                     }
                     $rootScope.dataBar.push(arcArr);
-                    console.log("rootScope.dataBar" + $rootScope.dataBar);
-                    $rootScope.barCtrlFlag = false;
-                    $rootScope.dataCtrlFlag = false;
+                    console.log("rootScope.dataBar"+$rootScope.dataBar);
+                    $rootScope.barCtrlFlag=false;
+                    $rootScope.dataCtrlFlag=false;
                     $rootScope.dataHasLoaded = true;
 
-                })
+
+
+                    //line chard
+                    $rootScope.producesBar = data;
+
+                }).error(function (data) {
+                    // log error
+                });
             }//closing map select function
 
             $rootScope.selected = false;
