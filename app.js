@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var remoteCall = require('./routes/getRemotePriceData');
 var remoteCall1 = require('./routes/getRemoteAreaData');
-var remoteCall2= require('./routes/getGeocodeInfo');
+var remoteCall2= require('./routes/getChartData');
 
 
 var app = express();
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.get('/getPriceData', remoteCall.getCropPrice);
 app.get('/getCropData', remoteCall1.getCropArea);
-app.get('/getData', remoteCall2.getCountyName);
+app.get('/getData', remoteCall2.getCropData);
 //app.get('/dbconnection',home.checkDBConnection);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

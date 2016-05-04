@@ -1,48 +1,69 @@
 /**
  * Created by Bharath Kumar on 5/3/2016.
  */
-var getMongoClient = require('../mongo-Config/connectMongo')
 
-exports.areaSchemaSearch = function(req,res){
+var getMongoClient = require('../mongo-Config/connectMongo');
+
+exports.getAreaData = function(res, countyName, callback){
     var mongoDbObj = getMongoClient.mongoDbObj();
-    var commodity_array=[];
-    mongoDbObj.areaSchema.distinct("commodity_desc" , { "county_name": "PENDLETON" } ,function(err,user){
-        if(err){throw err;}
-        else{
-            if(user){
-                for(var i=0;i<user.length;i++)
-                {
-                    console.log("commodity data is here" + user[i]);
-                    mongoDbObj.areaSchema.find({$and: [{county_name: "PENDLETON"}, {commodity_desc: user[i]}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, user1){
-                    if(err)throw err;
-                        else{
-                        if(user1){
-                            for(j=0;j<user1.length;j++) {
-                                console.log("value data of is here"+user1[j].commodity_desc+"" + user1[j].value);
-
-                               commodity_array.push({"commodity_name":user1[j].commodity_desc,"commodity_value":Number(user1[j].value)});
-                                for(k=0;k<commodity_array.length;k++){
-                                    console.log("type of value is"+typeof(commodity_array[k].commodity_value));
-                                    console.log("comodity_array is"+commodity_array[k].commodity_name+"value is"+commodity_array[k].commodity_value);
-                                }
-                            }
-
-                        }
-                        else{console.log("couldnt get data");}
-                    }
-
-                    })//closing second query
-                }//closing for loop
-
-            }//closing if
-          else{
-                console.log("Could not get the data");
-            }
-         
-        }
-    });
+    var result = getDistinctCrops(res, mongoDbObj, countyName, callback);
 };
 
+function getAverageArea(res,result, rslt){
+    var k = 0;
+    var jsonArray = [];
+    var avg = 0;
+    console.log(result)
+    console.log(rslt)
+    for(var i = 0 ; i < result.length ; i++){
+        for(var j = 0; j < rslt.length; j++) {
+            if (rslt[j].commodity_desc == result[i]) {
+                k++;
+                avg = avg + parseInt(rslt[j].value.replace(/[^0-9]/g, ''));
+                console.log(avg)
+            }
+        }
+        avg = avg/k;
+        k = 0;
+        jsonArray.push({"cropName" : result[i], "cropAcres" : avg});
+        avg = 0;
+    }
+    if(i==result.length){
+        res.setHeader('Content-Type', 'application/json');
+        res.send(jsonArray);
+    }
+
+}
+
+function getCropAreaData(res,mongoDbObj, countyName,result, callback){
+    mongoDbObj.areaSchema.find({$and: [{county_name: countyName}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, rslt){
+        if(err){
+            throw err;
+        }
+        else{
+            if(rslt.length > 0){
+                getAverageArea(res,result, rslt);
+            }
+            else{
+                console.log("could not get data");
+            }
+        }
+
+    });
+}
+
+function getDistinctCrops(res,mongoDbObj, countyName, callback){
+    mongoDbObj.areaSchema.distinct("commodity_desc" , { "county_name": countyName } ,function(err,result){
+        if(err){
+            throw err;
+        }
+        else{
+            if(result.length > 0){
+                getCropAreaData(res,mongoDbObj,countyName, result, callback);
+            }
+        }
+    })
+}
 
 exports.insertPriceData = function(jsonObj, res){
     var mongoDbObj = getMongoClient.mongoDbObj();
