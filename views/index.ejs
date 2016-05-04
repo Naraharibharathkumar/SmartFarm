@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="mapApp">
 <% include header %>
-<body>
+<body >
 
 <div class="container-fluid">
     <div class="jumbotron" style="background:transparent !important" >
@@ -12,7 +12,7 @@
                 <my-maps id="map-canvas"></my-maps>
             </div>
         </div>
-        <div class="col-xs-7 col-md-7" ng-controller="BarCtrl">
+        <div class="col-xs-7 col-md-7" ng-controller="BarCtrl" ng-hide="dataCtrlFlag">
             <div class="produceChart text-center" id="barChart">
                 <label>Arces of harvest in the region</label>
                 <canvas id="bar" class="chart chart-bar"
@@ -21,14 +21,14 @@
             </div>
         </div>
     </div>
-    <div class="row text-center">
+    <div class="row text-center" ng-controller="BarCtrl" ng-hide="barCtrlFlag">
         <div>
             <button ng-repeat="produce in producesBar" class="button" ng-click="selectChart($index)"> {{ produce.name }}</button>
        </div>
 
-        <div class="col-md-12 col-sm-12 text-center">
+        <div class="col-md-12 col-sm-12 text-center" >
 
-            <div ng-controller="LineCtrl" ng-show="selected" id="lineChart">
+            <div  ng-show="selected" id="lineChart">
                 <label>Price trend of {{name}}</label>
                 <br>
                 <label> measured in {{unit}}</label>

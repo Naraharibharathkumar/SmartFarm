@@ -97,7 +97,7 @@ function sendCropData(res,jsonArray, cropPriceData) {
                         if (cropFinal.name == cropDetail.cropName) {
                             checkEntry = 1;
                             cropFinal.year.push(parseInt(priceData.year));
-                            cropFinal.price.push(priceData.value);
+                            cropFinal.price.push(parseFloat(priceData.value));
                         }
                     });
                     if (checkEntry == 0) {
@@ -106,7 +106,7 @@ function sendCropData(res,jsonArray, cropPriceData) {
                             "arc": cropDetail.cropAcres,
                             "unit": priceData.unit_desc,
                             "year": [parseInt(priceData.year)],
-                            "price": [priceData.value]
+                            "price": [parseFloat(priceData.value)]
                         };
                         cropJSON.cropData.push(tempData);
                     }
@@ -117,7 +117,7 @@ function sendCropData(res,jsonArray, cropPriceData) {
                         "arc": cropDetail.cropAcres,
                         "unit": priceData.unit_desc,
                         "year": [parseInt(priceData.year)],
-                        "price": [priceData.value]
+                        "price": [parseFloat(priceData.value)]
                     };
                     cropJSON.cropData.push(tempData);
                 }
@@ -127,11 +127,11 @@ function sendCropData(res,jsonArray, cropPriceData) {
     });
     if (cropJSON.cropData.length > 0) {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(cropJSON.cropData));
+        res.send(cropJSON.cropData);
     }
     else {
         res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(cropJSON.cropData));
+        res.send(cropJSON.cropData);
     }
 }
 
