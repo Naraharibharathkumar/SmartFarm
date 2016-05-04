@@ -5,14 +5,11 @@
 var ns = require('http');
 var xml2js = require('xml2js');
 
-exports.getCountyName = function(lat, long,res, callback) {
-
-    // var lat= 37.3352;
-    // var long= -121.8811;
-    var pathToGo = "/api/block/2010/find?latitude="+ lat+ "&longitude=" + long;
+exports.getCountyName = function(pathToGO,res, callback) {
+    console.log(pathToGO)
     ns.get({
         host: 'data.fcc.gov',
-        path: pathToGo
+        path: pathToGO
     }, function doneSending(response) {
         console.log("Received Data and waiting for the end");
         var body = '';
@@ -24,19 +21,15 @@ exports.getCountyName = function(lat, long,res, callback) {
             console.log('No more data in response');
             var parser = new xml2js.Parser();
             parser.parseString(body, function(err,rslt){
-
                 var countyObjectStr= JSON.stringify(rslt['Response']['County']);
                 var stateObjectStr= JSON.stringify(rslt['Response']['State']);
-
                 var finalCountyObj = countyObjectStr.slice(1, countyObjectStr.indexOf("]"));
                 var finalStateObj = stateObjectStr.slice(1, stateObjectStr.indexOf("]"));
-
-               var countyName= JSON.parse(finalCountyObj).$.name;
+                var countyName= JSON.parse(finalCountyObj).$.name;
                 var stateName= JSON.parse(finalStateObj).$.name;
-
                 var countyStateJsonStr= "{ \"state\" : \"" + stateName.toUpperCase() +
                         "\", \"county\": \"" +  countyName.toUpperCase() + "\" }";
-                // console.log(countyStateJsonStr);
+                console.log(countyStateJsonStr);
 
                 callback(res,JSON.parse(countyStateJsonStr));
             })
