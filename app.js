@@ -27,7 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname+ '/public'));
 
 app.use('/', routes);
-app.use('/TEST', routes);
 app.get('/getPriceData', remoteCall.getCropPrice);
 app.get('/getCropData', remoteCall1.getCropArea);
 app.get('/getData', remoteCall2.getCropData);

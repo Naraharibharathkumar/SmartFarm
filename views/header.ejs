@@ -1,17 +1,23 @@
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=egde">
+    <meta name="viewport" http-equiv="Content-Type"
+          content="text/html; charset=UTF-8"
+          content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link href="/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="/images/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="/stylesheets/style1.css" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/style1.css" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/banner.css" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/watson-bootstrap-dark.css" rel="stylesheet" type="text/css">
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-            crossorigin="anonymous"></script>
     <script type="text/javascript"
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCL9kCGzu4TIVuotYsHHHhFrCpIlT2y1I4"></script>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
@@ -22,9 +28,33 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/angular.chartjs/0.8.8/angular-chart.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Signika:700,400' rel='stylesheet' type='text/css'>
-
-
-
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+        .row.content {
+            height: 1500px
+        }
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+            .row.content {
+                height: auto;
+            }
+        }
+    </style>
     <script>
         var produce;
 
@@ -33,23 +63,6 @@
             {name: 'Corn', arc:700, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [65, 59, 80, 81, 56, 7, 40]},
             {name: 'Ginger', arc:500, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [65, 2, 80, 81, 56, 55, 40]},
             {name: 'Grape', arc:200, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800],price: [0.1, 0.3, 0.4, 8.1, 5.6, 5.5, 4]}]
-
-//        $(document).ready(function(){
-//            getAjax();
-//            console.log("called ajax");
-//
-//        });
-//
-//        function getAjax(){
-//            $.ajax({
-//                type:"GET",
-//                url: "/getData",
-//                context: document.body,
-//                success: function(data){
-//                    produce = data;
-//                    console.log(produce);
-//                }});
-//        }
 
         var mapApp = angular.module("mapApp", ["chart.js"]);
         mapApp.directive("myMaps", function () {
@@ -166,31 +179,9 @@
                         map.setCenter(new google.maps.LatLng(y, x));
                     });
 
-//                    // Limit the zoom level
-//                    google.maps.event.addListener(map, 'zoom_changed', function () {
-//                        if (map.getZoom() < minZoomLevel) map.setZoom(minZoomLevel);
-//                    });
                 }
             };
         });
-
-
-//        mapApp.controller("mainCtrl",function($rootScope,$http){
-//            $rootScoope.init =  function getData(){
-//                $http
-//                        .get("/getData", {
-////                            params: {
-////                                lat: myLatLng.latitude,
-////                                lon: myLatLng.longitude,
-////
-////                            }
-//                        })
-//                        .success(function (data) {
-//                            produce = data;
-//                        }
-//            }
-//        });
-
 
         //arc bar chart
 
@@ -199,102 +190,47 @@
 //
             $rootScope.dataCtrlFlag = true;
 
+            $http.get('/getData').success(function (data) {
+                console.log(produce);
+                //JSON.parse(data);
+                produce = data;
+                $rootScope.produces = data;
+                $rootScope.labelsBar = [];
+                var arcArr =[];
+                $rootScope.dataBar = [];
 
-//            $rootScope.getData = function() {
-                $http.get('/getData').success(function (data) {
-                    console.log(produce);
-                    //JSON.parse(data);
-                    produce = data;
-                    $rootScope.produces = data;
-                    console.log(data);
-                    console.log(produce);
-                    console.log($rootScope.produces);
-                    $rootScope.labelsBar = [];
-                    var arcArr =[];
-                    $rootScope.dataBar = [];
-                   //  $rootScope.labelsBar=data;
-                   // console.log("labelsbase dayta"+$rootScope.labelsBar.name)
-                    //console.log("1" + $rootScope + produces);
-
-                  for(i=0;i<produce.length;i++) {
-                      $rootScope.labelsBar.push(produce[i].name) ;
-                      console.log("labels bar values"+$rootScope.labelsBar);
-                        arcArr.push(data[i].arc);
-                    }
-                    $rootScope.dataBar.push(arcArr);
-                    console.log("rootScope.dataBar"+$rootScope.dataBar);
-                    $rootScope.barCtrlFlag=false;
-                    $rootScope.dataCtrlFlag=false;
-                    $rootScope.dataHasLoaded = true;
+                for(i=0;i<produce.length;i++) {
+                    $rootScope.labelsBar.push(produce[i].name) ;
+                    console.log("labels bar values"+$rootScope.labelsBar);
+                    arcArr.push(data[i].arc);
+                }
+                $rootScope.dataBar.push(arcArr);
+                console.log("rootScope.dataBar"+$rootScope.dataBar);
+                $rootScope.barCtrlFlag=false;
+                $rootScope.dataCtrlFlag=false;
+                $rootScope.dataHasLoaded = true;
 
 
 
-                    //line chard
-                    $rootScope.producesBar = data;
-                    $rootScope.selected = false;
+                //line chard
+                $rootScope.producesBar = data;
+                $rootScope.selected = false;
 
 
-            $rootScope.selectChart = function(index) {
-                $rootScope.selected = true;
-                var array = [];
-//                array.push(produce[index].price);
-//                $rootScope.dataLine = array;
-//                $rootScope.year = produce[index].year;
-//                $rootScope.name = produce[index].name;
-//                $rootScope.unit = produce[index].unit;
-                array.push(data[index].price);
-                $rootScope.dataLine = array;
-                $rootScope.year = data[index].year;
-                $rootScope.name = data[index].name;
-                $rootScope.unit = data[index].unit;
-                console.log(data[index].year);
-                console.log(data[index].name);
-                console.log(data[index].unit);
-            }
-                }).error(function (data) {
-                    // log error
-                });
-
-    //  }
-
-
-
-            //$rootScope.produces = produce;
-//            $rootScope.labelsBar = [];
-//            var arcArr =[];
-//            $rootScope.dataBar = [];
-//            //console.log("1" + $rootScope + produces);
-//            for(i=0;i<produce.length;i++) {
-//                $rootScope.labelsBar.push($rootScope.produces[i].name) ;
-//                //$rootScope.labelsBar.push(produce[i].name) ;
-//                arcArr.push($rootScope.produces[i].arc)
-//                //arcArr.push(produce[i].arc)
-//            }
-//            $rootScope.dataBar.push(arcArr);
-//
-//            //$rootScope.producesBar = $rootScope.produces
-//            $rootScope.producesBar = produce;
-//            $rootScope.selected = false;
-
-            //line chart
-//            $rootScope.selectChart = function(index){
-//                $rootScope.selected = true;
-//                var array=[];
-////                array.push(produce[index].price);
-////                $rootScope.dataLine = array;
-////                $rootScope.year = produce[index].year;
-////                $rootScope.name = produce[index].name;
-////                $rootScope.unit = produce[index].unit;
-//                array.push($rootScope.produces[index].price);
-//                $rootScope.dataLine = array;
-//                $rootScope.year = $rootScope.produces[index].year;
-//                $rootScope.name = $rootScope.produces[index].name;
-//                $rootScope.unit = $rootScope.produces[index].unit;
-
-//            }
+                $rootScope.selectChart = function(index) {
+                    $rootScope.selected = true;
+                    var array = [];
+                    array.push(data[index].price);
+                    $rootScope.dataLine = array;
+                    $rootScope.year = data[index].year;
+                    $rootScope.name = data[index].name;
+                    $rootScope.unit = data[index].unit;
+                }
+            }).error(function (data) {
+                // log error
+            });
 
         });
-
 
     </script>
 
@@ -413,38 +349,29 @@
             background-color: #3e8e41;
             box-shadow: 0 5px #666;
             transform: translateY(4px);
+        }
 
 
     </style>
-
-    <div class="container-fluid">
-        <div class="page-header">
-        <div class="row">
-            <div class="col-md-3">
-                <div id="california-logo" align="left">
-                    <img src="images/california.jpg" height="82" width="82">
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="col-md text-center">
-                    <h1>Smart Farm</h1>
-                    <p><em>Team 3 project</em></p>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div id="usda-logo" align="right">
-                    <img src="images/usda.jpg" height="82" width="82">
+    <div class="row service-container">
+        <div class="col-lg-12 service-header">
+            <div class="row header">
+                <div class="container">
+                    <div
+                            class="avatar img-container col-lg-2 col-md-2 col-sm-2 hidden-xs">
+                        <img src="images/app.png" class="service-icon">
+                    </div>
+                    <div
+                            class="col-lg-10 col-md-10 col-sm-10 col-xs-12 dialog-description">
+                        <h1 style="font-size: 50px;" class="service-title">
+                            Smart Farm
+                        </h1>
+                        <p>
+                            Farm Smartly
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
-        <!--<div class="row">-->
-        <!--<div class="col-md text-center">-->
-        <!--<h1>Smart Farm</h1>-->
-        <!--<p><em>Team 3 project</em></p>-->
-        <!--</div>-->
-        <!--</div>-->
     </div>
 </head>
