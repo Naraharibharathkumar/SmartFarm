@@ -15,22 +15,19 @@ function getAverageArea(res, mongoDbObj, countyName, result, rslt){
     var avg = 0;
     console.log(result);
     console.log(rslt);
-    for(var i = 0 ; i < result.length ; i++){
-        for(var j = 0; j < rslt.length; j++) {
-            if (rslt[j].commodity_desc == result[i]) {
+    result.forEach(function(childResult){
+        rslt.forEach(function(childRslt){
+            if(childRslt.commodity_desc == childResult){
                 k++;
-                avg = avg + parseInt(rslt[j].value.replace(/[^0-9]/g, ''));
-                console.log(avg)
+                avg = avg + parseInt(childRslt.value.replace(/[^0-9]/g, ''));
             }
-        }
+        });
         avg = avg/k;
         k = 0;
-        jsonArray.push({"cropName" : result[i], "cropAcres" : avg});
+        jsonArray.push({"cropName" : childResult, "cropAcres" : avg});
         avg = 0;
-    }
-    if(i==result.length){
-        getCropPriceData(res, mongoDbObj, countyName, result, jsonArray)
-    }
+    });
+    getCropPriceData(res, mongoDbObj, countyName, result, jsonArray);
 }
 
 function getCropPriceData(res, mongoDbObj, countyName, result, jsonArray){
@@ -57,49 +54,59 @@ function getCropPriceData(res, mongoDbObj, countyName, result, jsonArray){
         }
     }
     getPriceData(0)
+    
 }
 
-function sendCropData(res,jsonArray, cropPriceData){
-    var cropJSON = {"cropData" : []};
-    function parseCropData(i){
-        if(i < jsonArray.length){
-            JSON.stringify({"key" : "value"},function(err){
-                if(err){
-                    console.log('error: '+err)
-                }
-                else{
-                    for(var j = 0; j < cropPriceData.PriceData.length; j++){
-                        if(jsonArray[i].cropName == cropPriceData.PriceData[j].commodity_desc){
-                            if(cropJSON.cropData.length > 0){
-                                var tempJSON = cropJSON.cropData;
-                                console.dir(JSON.parse(tempJSON[0].toString()));
-                                if(cropJSON.cropData[i].name == jsonArray[i].cropName){
-                                    cropJSON.cropData[i].year.push(parseInt(cropPriceData.PriceData[j].year));
-                                    cropJSON.cropData[i].price.push(cropPriceData.PriceData[j].value);
-                                }
-                            }
-                            else{
-                                var tempData ={
-                                    "name" : jsonArray[i].cropName.toString(),
-                                    "arc" : jsonArray[i].cropAcres,
-                                    "unit" : cropPriceData.PriceData[j].unit_desc,
-                                    "year" : [parseInt(cropPriceData.PriceData[j].year)],
-                                    "price" : [cropPriceData.PriceData[j].value]
-                                };
-                                cropJSON.cropData.push(tempData);
-                            }
+function sendCropData(res,jsonArray, cropPriceData) {
+    var cropJSON = {"cropData": []};
+    console.log(jsonArray)
+    console.log(cropPriceData.PriceData)
+    jsonArray.forEach(function (cropDetail) {
+        cropPriceData.PriceData.forEach(function (priceData) {
+            if (cropDetail.cropName == priceData.commodity_desc) {
+                if (cropJSON.cropData.length > 0) {
+                    var tempJSON = cropJSON.cropData;
+                    var checkEntry = 0;
+                    cropJSON.cropData.forEach(function (cropFinal) {
+                        if (cropFinal.name == cropDetail.cropName) {
+                            checkEntry = 1;
+                            cropFinal.year.push(parseInt(priceData.year));
+                            cropFinal.price.push(priceData.value);
                         }
+                    });
+                    if (checkEntry == 0) {
+                        var tempData = {
+                            "name": cropDetail.cropName.toString(),
+                            "arc": cropDetail.cropAcres,
+                            "unit": priceData.unit_desc,
+                            "year": [parseInt(priceData.year)],
+                            "price": [priceData.value]
+                        };
+                        cropJSON.cropData.push(tempData);
                     }
                 }
-                parseCropData(i+1);
-            });
-        }
-        if(i==jsonArray.length){
-            res.setHeader('Content-Type', 'application/json');
-            res.send(JSON.stringify(cropData));
-        }
+                else {
+                    var tempData = {
+                        "name": cropDetail.cropName.toString(),
+                        "arc": cropDetail.cropAcres,
+                        "unit": priceData.unit_desc,
+                        "year": [parseInt(priceData.year)],
+                        "price": [priceData.value]
+                    };
+                    cropJSON.cropData.push(tempData);
+                }
+            }
+
+        });
+    });
+    if (cropJSON.cropData.length > 0) {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(cropJSON.cropData));
     }
-    parseCropData(0)
+    else {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(cropJSON.cropData));
+    }
 }
 
 function getCropAreaData(res,mongoDbObj, countyName,result, callback){
@@ -134,9 +141,8 @@ function getDistinctCrops(res,mongoDbObj, countyName, callback){
 
 exports.insertPriceData = function(jsonObj, res){
     var mongoDbObj = getMongoClient.mongoDbObj();
-    console.log(jsonObj)
-    for(var i=0;i<jsonObj.length;i++){
-        mongoDbObj.priceSchema.insert(jsonObj[i],{w:1},function(err, result){
+    jsonObj.forEach(function(childJsonObj){
+        mongoDbObj.priceSchema.insert(childJsonObj,{w:1},function(err, result){
             if(err){
                 //res.write('Unable to write Data');
                 //res.end();
@@ -146,14 +152,14 @@ exports.insertPriceData = function(jsonObj, res){
                 //res.end();
             }
         });
-    }
+    });
 };
 
 exports.insertAreaData = function(jsonObj, res){
     var mongoDbObj = getMongoClient.mongoDbObj();
     console.log(jsonObj);
-    for(var i=0;i<jsonObj.length;i++){
-        mongoDbObj.areaSchema.insert(jsonObj[i],{w:1},function(err, result){
+    jsonObj.forEach(function(childJsonObj){
+        mongoDbObj.areaSchema.insert(childJsonObj,{w:1},function(err, result){
             if(err){
                 //res.write('Unable to write Data');
                 //res.end();
@@ -163,5 +169,5 @@ exports.insertAreaData = function(jsonObj, res){
                 //res.end();
             }
         });
-    }
+    });
 };
