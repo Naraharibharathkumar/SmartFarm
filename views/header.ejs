@@ -26,6 +26,8 @@
 
 
     <script>
+
+
         var mapApp = angular.module("mapApp", ["chart.js"]);
         mapApp.directive("myMaps", function () {
             return {
@@ -149,37 +151,58 @@
             };
         });
 
-        var produceData = [90, 80, 60, 20, 10] //replace with real data later
-        //var produceName = [{name:'Potato'}, {name:'Tomato'}, {name:'Corn'}, {name:'Ginger'}, {name:'Grape'}] //replace with real data later
         var produce = [{name: 'Potato', arc:900, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 55, 40]]},
             {name: 'Tomato', arc:800, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 0, 40]]},
             {name: 'Corn', arc:700, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 7, 40]]},
             {name: 'Ginger', arc:500, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 2, 80, 81, 56, 55, 40]]},
-            {name: 'Grape', arc:200, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800],price: [[65, 59, 4, 81, 56, 55, 40]]}]
+            {name: 'Grape', arc:200, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800],price: [[0.1, 0.3, 0.4, 8.1, 5.6, 5.5, 4]]}]
 
-        //line chart for demo
+//        mapApp.controller("mainCtrl",function($rootScope,$http){
+//            function getData(){
+//                $http
+//                        .get("/getData", {
+//                            params: {
+//                                lat: myLatLng.latitude,
+//                                lon: myLatLng.longitude,
+//
+//                            }
+//                        })
+//                        .success(function (data) {
+//                            produce = data;
+//                        }
+//            }
+//        })
+        //price line chart
         mapApp.controller("LineCtrl", function ($rootScope) {
-            $rootScope.labelsLine = [200, 300, 400, 500, 600, 700, 800];
-            $rootScope.datalines = produce;
-            // $rootScope.dataline=[65, 59, 80, 81, 56, 55, 40];
+            $rootScope.producesBar = produce;
+            $rootScope.selected = false;
 
-            //$rootScope.seriesLine = ['Series A', 'Series B'];
-            $rootScope.dataLine = [
-                [65, 59, 80, 81, 56, 55, 40],
-                [65, 59, 80, 81, 56, 55, 40],
-                [65, 59, 80, 81, 56, 55, 40],
-                [65, 59, 80, 81, 56, 55, 40]];
-//            $rootScope.onClick = function (points, evt) {
-//                console.log(points, evt);
-//            };
+
+
+            $rootScope.selectChart = function(index){
+                $rootScope.selected = true;
+                $rootScope.dataLine = produce[index].price;
+                $rootScope.year = produce[index].year;
+                $rootScope.name = produce[index].name;
+                $rootScope.unit = produce[index].unit;
+                console.log($rootScope.dataLine);
+            }
         });
 
-
+        //arc bar chart
         mapApp.controller("BarCtrl", ['$rootScope', function ($rootScope) {
-            $rootScope.producesBar = produce;
-            $rootScope.labelsBar = [produce[0].name,produce[1].name,produce[2].name,produce[3].name, produce[4].name];
-                 //   ['Potato', 'Tomato', 'Corn', 'Ginger', 'Grape']; // To draw 5 bars
-            $rootScope.dataBar = [produceData];
+
+            $rootScope.labelsBar = [];
+            var arcArr =[];
+            $rootScope.dataBar = [];
+
+            for(i=0;i<produce.length;i++) {
+                $rootScope.labelsBar.push(produce[i].name) ;
+
+                arcArr.push(produce[i].arc)
+            }
+            $rootScope.dataBar.push(arcArr);
+            console.log($rootScope.labelsBar);
         }]);
     </script>
 
@@ -276,6 +299,28 @@
         { content: "\f046"; } /* checked icon */
         input[type=checkbox]:checked + label:before
         { letter-spacing: 5px; } /* allow space for check mark */
+
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: 1px solid green;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            float: left;
+        }
+
+        .button:hover {
+            background-color: #3e8e41;
+        }
+
+        .button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
 
 
     </style>

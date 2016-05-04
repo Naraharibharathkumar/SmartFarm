@@ -2,7 +2,7 @@
 <html ng-app="mapApp">
 <% include header %>
 <body>
-</div>
+
 <div class="container-fluid">
     <div class="jumbotron" style="background:transparent !important" >
     <div class="row">
@@ -13,24 +13,27 @@
             </div>
         </div>
         <div class="col-xs-7 col-md-7" ng-controller="BarCtrl">
-            <div class="produceChart" id="barChart">
-                <div class="produceChkbox" ng-repeat="produce in producesBar">
-                    <input id="{{produce.name}}" type="checkbox" ng-model="produce.show">
-                    <label for="{{produce.name}}">  {{ produce.name }} </label>
-                </div>
+            <div class="produceChart text-center" id="barChart">
+                <label>Arces of harvest in the region</label>
                 <canvas id="bar" class="chart chart-bar"
                         chart-data="dataBar" chart-labels="labelsBar" chart-series="series">
                 </canvas>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-15 col-sm-3" ng-repeat="produce in producesBar" ng-show="produce.show">
+    <div class="row text-center">
+        <div>
+            <button ng-repeat="produce in producesBar" class="button" ng-click="selectChart($index)"> {{ produce.name }}</button>
+       </div>
 
-            <div class="text-center" ng-controller="LineCtrl" id="lineChart">
-                <label>{{produce.name}} price trend</label>
-                <canvas class="chart chart-line priceChart" chart-data="produce.price"
-                        chart-labels="labelsLine" chart-legend="false" chart-series="produce.name"
+        <div class="col-md-12 col-sm-12 text-center">
+
+            <div ng-controller="LineCtrl" ng-show="selected" id="lineChart">
+                <label>Price trend of {{name}}</label>
+                <br>
+                <label> measured in {{unit}}</label>
+                <canvas class="chart chart-line priceChart" chart-data="dataLine"
+                        chart-labels="year" chart-legend="false" chart-series="name"
                         chart-click="onClick">
                 </canvas>
             </div>
@@ -38,5 +41,6 @@
     </div>
 </div>
 </div>
+
 </body>
 </html>
