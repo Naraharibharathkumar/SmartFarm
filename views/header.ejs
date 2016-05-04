@@ -151,27 +151,24 @@
 
         var produceData = [90, 80, 60, 20, 10] //replace with real data later
         //var produceName = [{name:'Potato'}, {name:'Tomato'}, {name:'Corn'}, {name:'Ginger'}, {name:'Grape'}] //replace with real data later
-        var produce = [{name: 'Potato', show: false, price: [[65, 59, 80, 81, 56, 55, 40]]},
-            {name: 'Tomato', show: false, price: [[65, 59, 80, 81, 56, 0, 40]]},
-            {name: 'Corn', show: false, price: [[65, 59, 80, 81, 56, 7, 40]]},
-            {name: 'Ginger', show: false, price: [[65, 2, 80, 81, 56, 55, 40]]},
-            {name: 'Grape', show: false, price: [[65, 59, 4, 81, 56, 55, 40]]}]
+        var produce = [{name: 'Potato', arc:900, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 55, 40]]},
+            {name: 'Tomato', arc:800, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 0, 40]]},
+            {name: 'Corn', arc:700, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 59, 80, 81, 56, 7, 40]]},
+            {name: 'Ginger', arc:500, unit: '$/lb',year:[200, 300, 400, 500, 600, 700, 800], price: [[65, 2, 80, 81, 56, 55, 40]]},
+            {name: 'Grape', arc:200, unit: '$/lb', year:[200, 300, 400, 500, 600, 700, 800],price: [[65, 59, 4, 81, 56, 55, 40]]}]
 
         //line chart for demo
         mapApp.controller("LineCtrl", function ($rootScope) {
-            $rootScope.labelsLine = ["January", "February", "March", "April", "May", "June", "July"];
+            $rootScope.labelsLine = [200, 300, 400, 500, 600, 700, 800];
             $rootScope.datalines = produce;
             // $rootScope.dataline=[65, 59, 80, 81, 56, 55, 40];
 
-            $rootScope.seriesLine = ['Series A', 'Series B'];
-//          $rootScope.dataLine = [
-//                [65, 59, 80, 81, 56, 55, 40],
-//                [28, 48, 40, 19, 86, 27, 90],
-//              [28, 48, 40, 19, 5, 27, 90],
-//              [28, 48, 40, 19, 86, 5, 90],
-//              [28, 48, 1, 19, 86, 27, 90]
-//            ];
-            $rootScope.dataLine = [[65, 59, 80, 81, 56, 55, 40]];
+            //$rootScope.seriesLine = ['Series A', 'Series B'];
+            $rootScope.dataLine = [
+                [65, 59, 80, 81, 56, 55, 40],
+                [65, 59, 80, 81, 56, 55, 40],
+                [65, 59, 80, 81, 56, 55, 40],
+                [65, 59, 80, 81, 56, 55, 40]];
 //            $rootScope.onClick = function (points, evt) {
 //                console.log(points, evt);
 //            };
@@ -180,8 +177,8 @@
 
         mapApp.controller("BarCtrl", ['$rootScope', function ($rootScope) {
             $rootScope.producesBar = produce;
-            $rootScope.labelsBar = ['Potato', 'Tomato', 'Corn', 'Ginger', 'Grape']; // To draw 5 bars
-
+            $rootScope.labelsBar = [produce[0].name,produce[1].name,produce[2].name,produce[3].name, produce[4].name];
+                 //   ['Potato', 'Tomato', 'Corn', 'Ginger', 'Grape']; // To draw 5 bars
             $rootScope.dataBar = [produceData];
         }]);
     </script>
