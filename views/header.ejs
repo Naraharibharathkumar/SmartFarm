@@ -112,8 +112,10 @@
                     getTopCrops(myLatLng.lat(), myLatLng.lng());
                     circle.bindTo('center', marker, 'position');
 
-                    function getTopCrops(obj1, obj2){
-                        scope.mapSelect(obj1, obj2);
+                    function getTopCrops(obj1, obj2,first){
+                        if(first != false)
+                                first = true;
+                        scope.mapSelect(obj1, obj2,first);
                     }
 
                     // move the marker on click events
@@ -123,7 +125,7 @@
                         //getAjax();
                         // call getCountyName(event.latLng.latitude, event.latLng.longitude)
                         //scope.mapSelect(event.latLng.lat(), event.latLng.lng());
-                        getTopCrops(event.latLng.lat(), event.latLng.lng())
+                        getTopCrops(event.latLng.lat(), event.latLng.lng(),false)
                         // reverse geocode
                         geocoder.geocode({'location': event.latLng}, function (results, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
@@ -147,7 +149,7 @@
                         geocoder.geocode({'location': marker.getPosition()}, function (results, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
                                 if (results[1]) {
-                                    getTopCrops(marker.getPosition().lat(), marker.getPosition().lng())
+                                    getTopCrops(marker.getPosition().lat(), marker.getPosition().lng(),false)
                                     infowindow.setContent(results[1].formatted_address);
                                 } else {
                                     infowindow.setContent(marker.getPosition().toString())
@@ -219,7 +221,7 @@
                 // log error
             });
             */
-            $rootScope.mapSelect = function (obj1, obj2) {
+            $rootScope.mapSelect = function (obj1, obj2,first) {
                 var path = '/getData?lat='+obj1+'&long='+obj2
                 $http.get(path).success(function (data) {
                     //JSON.parse(data);
@@ -244,6 +246,17 @@
 
                     //line chard
                     $rootScope.producesBar = data;
+
+                    if(data[0])
+                    {
+                        $rootScope.selected = true;
+                        var array = [];
+                        array.push($rootScope.produces[0].price);
+                        $rootScope.dataLine = array;
+                        $rootScope.year =  $rootScope.produces[0].year;
+                        $rootScope.name =  $rootScope.produces[0].name;
+                        $rootScope.unit =  $rootScope.produces[0].unit;
+                    }
 
                 }).error(function (data) {
                     // log error
