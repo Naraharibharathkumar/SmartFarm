@@ -10,9 +10,7 @@ exports.getCropArea = function(req, res) {
         customDate-1,
         customDate-2,
         customDate-3,
-        customDate-4,
-        customDate-5,
-        customDate-6
+        customDate-4
     ];
     ns.get({
         host: 'nass-api.azurewebsites.net',

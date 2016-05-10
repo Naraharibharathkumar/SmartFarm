@@ -126,14 +126,83 @@ function sendCropData(res,jsonArray, cropPriceData) {
         });
     });
     if (cropJSON.cropData.length > 0) {
-        res.setHeader('Content-Type', 'application/json');
-        res.send(cropJSON.cropData);
+        sortData(res, cropJSON.cropData);
+        //res.setHeader('Content-Type', 'application/json');
+        //res.send(cropJSON.cropData);
     }
     else {
         res.setHeader('Content-Type', 'application/json');
         res.send(cropJSON.cropData);
     }
 }
+
+function sortData(res,cropData){
+    var customDate = parseInt(new Date().getFullYear());
+    var yearArray = [
+        customDate-4,
+        customDate-3,
+        customDate-2,
+        customDate-1
+    ];
+    var finalPrice = [];
+    var finalYear = [];
+    var j = 0;
+    cropData.forEach(function(childCropData){
+        var i = 0;
+        var k = 0;
+        yearArray.forEach(function(childArray){
+            childCropData.year.forEach(function(childYear){
+                if(childYear == childArray){
+                    finalYear.push(childYear);
+                    finalPrice.push(childCropData.price[i]);
+                }
+                i++;
+            });
+            i = 0;
+            k++;
+            if(k==yearArray.length){
+                childCropData.year = finalYear;
+                childCropData.price = finalPrice;
+                finalYear = [];
+                finalPrice = [];
+            }
+        });
+        j++;
+        if(j == cropData.length){
+            console.log(cropData)
+            res.setHeader('Content-Type', 'application/json');
+            res.send(cropData);
+        }
+    });
+    /*
+    yearArray.forEach(function(yearData){
+        cropData.forEach(function(childCropData){
+            var i = 0;
+            childCropData.year.forEach(function(childYear){
+                if(childYear == yearData.toString()){
+                    finalYear.push(childYear);
+                    finalPrice.push(childCropData.price[i]);
+                }
+                i++;
+            });
+            if(i==childCropData.year.length){
+                console.log(finalYear)
+                childCropData.year = finalYear;
+                childCropData.price = finalPrice;
+                finalPrice = [];
+                finalYear = [];
+            }
+        });
+        k++;
+        if(k==yearArray.length){
+            console.log(cropData)
+            res.setHeader('Content-Type', 'application/json');
+            res.send(cropData);
+        }
+    });
+    */
+}
+
 
 exports.insertPriceData = function(jsonObj, res){
     var mongoDbObj = getMongoClient.mongoDbObj();
