@@ -45,7 +45,7 @@ The MEAN stack makes use of MongoDB, Express.js, Angular.js, and Node.js.
 
 ## Contributors
 
-* _Baharath Kumar Narahari_
+* _Bharath Kumar Narahari_
 * _Danhua Yang_
 * _Yassaman Zand Moghaddam_
 * _Taruna Kukreja_
