@@ -4,7 +4,7 @@
 var mongoClient=require('mongodb').MongoClient;
 var mongoDbObj;
 
-mongoClient.connect('mongodb://localhost/smartFarm', function(err, db) {
+mongoClient.connect('mongodb://bknarahari:1234@ds046939.mlab.com:46939/smartfarm', function(err, db) {
     if (err)
         console.log(err);
     else {
