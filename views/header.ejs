@@ -96,7 +96,7 @@
                         animation: google.maps.Animation.DROP,
                         position: myLatLng
                     });
-                    // call getCountyName(myLatLng.latitude, myLatLng.longitude)
+                    //call getCountyName(myLatLng.latitude, myLatLng.longitude)
 
                     // default address
                     //infowindow.setContent(" SJSU, San Jose, CA 95192");
@@ -113,9 +113,10 @@
                     circle.bindTo('center', marker, 'position');
 
                     function getTopCrops(obj1, obj2,first){
-                        if(first != false)
+                            if(first != false) {
                                 first = true;
-                        scope.mapSelect(obj1, obj2,first);
+                                scope.mapSelect(obj1, obj2, first);
+                            }
                     }
 
                     // move the marker on click events
@@ -123,20 +124,20 @@
                         marker.setPosition(event.latLng);
                         circle.setCenter(event.latLng);
                         //getAjax();
-                        // call getCountyName(event.latLng.latitude, event.latLng.longitude)
+                        //call getCountyName(event.latLng.latitude, event.latLng.longitude)
                         //scope.mapSelect(event.latLng.lat(), event.latLng.lng());
-                        getTopCrops(event.latLng.lat(), event.latLng.lng(),false)
                         // reverse geocode
                         geocoder.geocode({'location': event.latLng}, function (results, status) {
                             if (status === google.maps.GeocoderStatus.OK) {
                                 if (results[1]) {
                                     infowindow.setContent(results[1].formatted_address);
                                     infowindow.open(map, marker);
+                                    getTopCrops(event.latLng.lat(), event.latLng.lng())
                                 } else {
                                     window.alert('No results found');
                                 }
                             } else {
-                                window.alert('Geocoder failed due to: ' + status);
+                                window.alert('This Application is limited to U.S.A region ');
                             }
                         });
                     });
@@ -155,7 +156,7 @@
                                     infowindow.setContent(marker.getPosition().toString())
                                 }
                             } else {
-                                window.alert('Geocoder failed due to: ' + status);
+                                window.alert('This Application is limited to U.S.A region ');
                             }
                         });
                     });
@@ -242,11 +243,8 @@
                     $rootScope.dataCtrlFlag=false;
                     $rootScope.dataHasLoaded = true;
 
-
-
                     //line chard
                     $rootScope.producesBar = data;
-
                     if(data[0])
                     {
                         $rootScope.selected = true;
@@ -257,15 +255,12 @@
                         $rootScope.name =  $rootScope.produces[0].name;
                         $rootScope.unit =  $rootScope.produces[0].unit;
                     }
-
                 }).error(function (data) {
                     // log error
                 });
             }//closing map select function
 
             $rootScope.selected = false;
-
-
             $rootScope.selectChart = function(index) {
                 $rootScope.selected = true;
                 var array = [];

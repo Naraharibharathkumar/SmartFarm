@@ -25,20 +25,27 @@ function getDistinctCrops(res, mongoDbObj, locationName){
 
 
 function getCropAreaData(res,mongoDbObj, locationName,result){
-    mongoDbObj.areaSchema.find({$and: [{county_name: locationName.county}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, rslt){
-        if(err){
-            throw err;
-        }
-        else{
-            if(rslt.length > 0){
-                getAverageArea(res,mongoDbObj, locationName, result, rslt);
+    /*
+    if((locationName.county == "")&&(locationName.state == "")){
+
+    }
+    else{
+    */
+        mongoDbObj.areaSchema.find({$and: [{county_name: locationName.county}]},{_id:0,value:1,commodity_desc:1}).toArray(function(err, rslt){
+            if(err){
+                throw err;
             }
             else{
-                console.log("could not get data");
+                if(rslt.length > 0){
+                    getAverageArea(res,mongoDbObj, locationName, result, rslt);
+                }
+                else{
+                    console.log("could not get data");
+                }
             }
-        }
 
-    });
+        });
+    //}
 }
 
 function getAverageArea(res, mongoDbObj, locationName, result, rslt){
