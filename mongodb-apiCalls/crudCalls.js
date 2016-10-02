@@ -5,8 +5,15 @@
 var getMongoClient = require('../mongo-Config/connectMongo');
 
 exports.getAreaData = function(res, locationName){
-    var mongoDbObj = getMongoClient.mongoDbObj();
-    getDistinctCrops(res, mongoDbObj, locationName);
+    if(locationName.county == "\"\""){
+        var cropJSON =  {"cropData": []};
+        res.setHeader('Content-Type', 'application/json');
+        res.send(cropJSON.cropData);
+    }
+    else{
+        var mongoDbObj = getMongoClient.mongoDbObj();
+        getDistinctCrops(res, mongoDbObj, locationName);
+    }
 };
 
 

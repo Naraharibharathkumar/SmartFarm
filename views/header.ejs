@@ -226,34 +226,39 @@
                 var path = '/getData?lat='+obj1+'&long='+obj2
                 $http.get(path).success(function (data) {
                     //JSON.parse(data);
-                    produce = data;
-                    $rootScope.produces = data;
-                    $rootScope.labelsBar = [];
-                    var arcArr =[];
-                    $rootScope.dataBar = [];
+                    if(data.length > 0){
+                        produce = data;
+                        $rootScope.produces = data;
+                        $rootScope.labelsBar = [];
+                        var arcArr =[];
+                        $rootScope.dataBar = [];
 
-                    for(i=0;i<produce.length;i++) {
-                        $rootScope.labelsBar.push(produce[i].name) ;
-                        console.log("labels bar values"+$rootScope.labelsBar);
-                        arcArr.push(data[i].arc);
+                        for(i=0;i<produce.length;i++) {
+                            $rootScope.labelsBar.push(produce[i].name) ;
+                            console.log("labels bar values"+$rootScope.labelsBar);
+                            arcArr.push(data[i].arc);
+                        }
+                        $rootScope.dataBar.push(arcArr);
+                        console.log("rootScope.dataBar"+$rootScope.dataBar);
+                        $rootScope.barCtrlFlag=false;
+                        $rootScope.dataCtrlFlag=false;
+                        $rootScope.dataHasLoaded = true;
+
+                        //line chard
+                        $rootScope.producesBar = data;
+                        if(data[0])
+                        {
+                            $rootScope.selected = true;
+                            var array = [];
+                            array.push($rootScope.produces[0].price);
+                            $rootScope.dataLine = array;
+                            $rootScope.year =  $rootScope.produces[0].year;
+                            $rootScope.name =  $rootScope.produces[0].name;
+                            $rootScope.unit =  $rootScope.produces[0].unit;
+                        }
                     }
-                    $rootScope.dataBar.push(arcArr);
-                    console.log("rootScope.dataBar"+$rootScope.dataBar);
-                    $rootScope.barCtrlFlag=false;
-                    $rootScope.dataCtrlFlag=false;
-                    $rootScope.dataHasLoaded = true;
+                    else{
 
-                    //line chard
-                    $rootScope.producesBar = data;
-                    if(data[0])
-                    {
-                        $rootScope.selected = true;
-                        var array = [];
-                        array.push($rootScope.produces[0].price);
-                        $rootScope.dataLine = array;
-                        $rootScope.year =  $rootScope.produces[0].year;
-                        $rootScope.name =  $rootScope.produces[0].name;
-                        $rootScope.unit =  $rootScope.produces[0].unit;
                     }
                 }).error(function (data) {
                     // log error

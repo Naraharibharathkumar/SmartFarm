@@ -6,7 +6,7 @@ var ns = require('http');
 var xml2js = require('xml2js');
 
 exports.getCountyName = function(pathToGO,res, callback) {
-    console.log(pathToGO)
+    console.log(pathToGO);
     ns.get({
         host: 'data.fcc.gov',
         path: pathToGO
@@ -21,26 +21,24 @@ exports.getCountyName = function(pathToGO,res, callback) {
             console.log('No more data in response');
             var parser = new xml2js.Parser();
             parser.parseString(body, function(err,rslt){
-                console.log("Hello World");
                 var countyObjectStr= JSON.stringify(rslt['Response']['County']);
                 var stateObjectStr= JSON.stringify(rslt['Response']['State']);
                 var finalCountyObj = countyObjectStr.slice(1, countyObjectStr.indexOf("]"));
                 var finalStateObj = stateObjectStr.slice(1, stateObjectStr.indexOf("]"));
-                console.log(finalStateObj.$);
-                /*if(finalCountyObj.$ == undefined)
+                if(finalCountyObj == "\"\"")
                 {
                     var countyStateJsonStr= "{ \"state\" : \"\", \"county\": \"\" }";
                     callback(res,JSON.parse(countyStateJsonStr));
                 }
                 else{
-                    */
+
                     var countyName= JSON.parse(finalCountyObj).$.name;
                     var stateName= JSON.parse(finalStateObj).$.name;
                     var countyStateJsonStr= "{ \"state\" : \"" + stateName.toUpperCase() +
                         "\", \"county\": \"" +  countyName.toUpperCase() + "\" }";
                     console.log(countyStateJsonStr);
                     callback(res,JSON.parse(countyStateJsonStr));
-               // }
+                }
             })
         });
         response.on('error', function (errorDisplay) {
