@@ -3,6 +3,8 @@
 **CmpE272 Team Project**  
 **_SJSU_**
 
+## Live Link : https://smart-farm.herokuapp.com
+
 ## Synopsis
 
 The focus of this project is on encouraging farmers and industries to adopt the crop rotation technique, which is considered as a sustainable farming method, rather than monocropping. 
